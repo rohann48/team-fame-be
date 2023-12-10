@@ -1,0 +1,18 @@
+{
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*.controller.ts"],
+  "defaultModelsExpandDepth": -1,
+  "spec": {
+    "outputDirectory": "build",
+    "specVersion": 3
+  },
+  "routes": {
+    "routesDir": "build",
+    "middleware": "express"
+  },
+  "ignore": [
+    "**/node_modules/sequelize/**",
+    "**/node_modules/sequelize-typescript/**"
+  ]
+}
