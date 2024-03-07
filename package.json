@@ -1,7 +1,7 @@
 {
-  "name": "supplier-actionplan-be",
+  "name": "team-fame-be",
   "version": "1.0.0",
-  "description": "supplier actionplan",
+  "description": "team fame",
   "main": "app.ts",
   "scripts": {
     "tsoa": "tsoa",

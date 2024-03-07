@@ -88,8 +88,6 @@ export class s3File {
   /**downloading the s3 file by providing the KEY of the uploaded file*/
   async downloadS3File(req: Request, res: Response) {
     try {
-      console.log("hello");
-
       // Initializing S3 Interface
       const s3 = new AWS.S3({
         accessKeyId: s3Config.accessKeyId,
