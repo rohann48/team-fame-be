@@ -15,4 +15,9 @@ export class EventService {
     const data = await Event.getEventById(eventId);
     return data;
   }
+
+  async deleteEventById(eventId) {
+    const data = await Event.deleteEventById(eventId);
+    return data;
+  }
 }

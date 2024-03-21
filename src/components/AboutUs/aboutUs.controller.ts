@@ -10,6 +10,7 @@ import {
   Put,
   SuccessResponse,
   Tags,
+  Delete,
 } from "tsoa";
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
@@ -24,7 +25,7 @@ export class AboutUsController extends Controller {
   @Get()
   public async getActionPlansForSupplier() {
     try {
-      const data = await new AboutUsService().getAboutUsList();
+      const data = await new AboutUsService().getAboutUsList({});
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       console.log(error);
@@ -36,7 +37,7 @@ export class AboutUsController extends Controller {
   @Post()
   public async createActionPlanForSupplier(
     @Request() req: express.Request,
-    @Body() newData: NewAboutUsparams
+    @Body() newData
   ) {
     try {
       const doc = await new AboutUsService().addAboutUs(newData);
@@ -46,6 +47,33 @@ export class AboutUsController extends Controller {
       //   if (err.code === 11000) {
       //     return err;
       //   } else throw new HttpException(400, err, err?.message);
+    }
+  }
+
+  @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Put("{aboutId}")
+  public async updateAboutUsId(@Path() aboutId, @Query() modifiedData) {
+    try {
+      const data = await new AboutUsService().updateAboutUsId(
+        aboutId,
+        modifiedData
+      );
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(400, error);
+    }
+  }
+
+  @SuccessResponse(200, HttpResponseMessage.DELETED)
+  @Delete("delete/{aboutId}")
+  public async deleteAboutUsById(@Path() aboutId) {
+    try {
+      const data = await new AboutUsService().deleteAboutUsById(aboutId);
+      return new HttpSuccess(HttpResponseMessage.DELETED, data);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(400, error);
     }
   }
 }

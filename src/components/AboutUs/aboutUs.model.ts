@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { IAboutUs, IAboutUsModel } from "./aboutUs.interface";
+import { IAboutUs, IAboutUsModel, NewAboutUsparams } from "./aboutUs.interface";
 
 export const AboutUsSchema: Schema = new Schema(
   {
@@ -15,7 +15,7 @@ export const AboutUsSchema: Schema = new Schema(
 );
 
 AboutUsSchema.statics = {
-  addAboutUs: async function (data) {
+  addAboutUs: async function (data: NewAboutUsparams) {
     try {
       const aboutUs = new AboutUs(data);
       const aboutUsDoc = await aboutUs.save();
@@ -26,8 +26,30 @@ AboutUsSchema.statics = {
   },
   getAboutUsList: async function (matchQuery) {
     try {
-      const AboutUs = await this.findOne(matchQuery);
-      return AboutUs;
+      const aboutUs = await this.findOne(matchQuery);
+      return aboutUs;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateAboutUsId: async function (aboutId, data) {
+    try {
+      const aboutUs = await this.findByIdAndUpdate(
+        aboutId,
+        { $set: data },
+        { new: true }
+      );
+      return aboutUs;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  deleteAboutUsById: async function (aboutId) {
+    try {
+      const aboutUs = await this.findByIdAndDelete(aboutId);
+      return aboutUs;
     } catch (err) {
       throw err;
     }

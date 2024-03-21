@@ -11,9 +11,14 @@ const fileDetails = {
 export const EventSchema: Schema = new Schema(
   {
     name: String,
-    details: String,
+    title: String,
+    description: String,
+    location: String,
     status: String,
-    image: fileDetails,
+    date: Date,
+    time: String,
+    image: String,
+    // image: fileDetails,
   },
   {
     timestamps: true,
@@ -36,8 +41,8 @@ EventSchema.statics = {
   },
   getEventList: async function (matchQuery) {
     try {
-      const Events = await this.find(matchQuery);
-      return Events;
+      const events = await this.find(matchQuery);
+      return events;
     } catch (err) {
       throw err;
     }
@@ -45,8 +50,17 @@ EventSchema.statics = {
 
   getEventById: async function (id) {
     try {
-      const Events = await this.findById(id);
-      return Events;
+      const events = await this.findById(id);
+      return events;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  deleteEventById: async function (eventId) {
+    try {
+      const aboutUs = await this.findByIdAndDelete(eventId);
+      return aboutUs;
     } catch (err) {
       throw err;
     }

@@ -8,10 +8,15 @@ interface fileDetails {
 }
 interface IEventSchema extends Document {
   _id: any;
-  name: String;
-  details: String;
-  status: String;
-  image: fileDetails;
+  name: string;
+  title: string;
+  description: string;
+  location: string;
+  status: string;
+  date: Date;
+  time: string;
+  image: string;
+  // fileDetails;
 }
 
 //instance methods, virtuals
@@ -27,11 +32,16 @@ export interface IEventModel extends Model<IEvent> {
   addEvent(data: NewEventparams): Promise<IEvent>;
   getEventList(matchQuery: object): Promise<Array<IEvent>>;
   getEventById(id: IEvent["_id"]): Promise<IEvent>;
+  deleteEventById(id: IEvent["_id"]): Promise<IEvent>;
 }
 
 export interface NewEventparams {
   name: IEvent["name"];
-  details: IEvent["details"];
+  title: IEvent["title"];
+  description: IEvent["description"];
+  location: IEvent["location"];
   status: IEvent["status"];
-  image: IEvent["image"];
+  image?: IEvent["image"];
+  date: IEvent["date"];
+  time: IEvent["time"];
 }

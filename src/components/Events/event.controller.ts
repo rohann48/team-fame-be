@@ -22,7 +22,7 @@ import { EventService } from "./event.service";
 export class EventController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   @Get()
-  public async getActionPlansForSupplier() {
+  public async getEvents() {
     try {
       const data = await new EventService().getAllEventList();
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
@@ -33,7 +33,7 @@ export class EventController extends Controller {
 
   @SuccessResponse(201, HttpResponseMessage.CREATED)
   @Post()
-  public async createActionPlanForSupplier(
+  public async createEvent(
     @Request() req: express.Request,
     @Body() newEvent: NewEventparams
   ) {
@@ -54,6 +54,17 @@ export class EventController extends Controller {
     try {
       const data = await new EventService().getEventById(eventId);
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      throw new HttpException(400, error);
+    }
+  }
+
+  @SuccessResponse(200, HttpResponseMessage.DELETED)
+  @Get("delete/{eventId}")
+  public async deleteEventById(@Path() eventId) {
+    try {
+      const data = await new EventService().deleteEventById(eventId);
+      return new HttpSuccess(HttpResponseMessage.DELETED, data);
     } catch (error) {
       throw new HttpException(400, error);
     }

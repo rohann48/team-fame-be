@@ -16,8 +16,10 @@ export interface IAboutUsPopulated extends IAboutUs {}
 
 export interface IAboutUsModel extends Model<IAboutUs> {
   addAboutUs(data: NewAboutUsparams): Promise<IAboutUs>;
-  getAboutUsList(matchQuery: object): Promise<Array<IAboutUs>>;
+  getAboutUsList(matchQuery: object): Promise<IAboutUs>;
   getAboutUsById(id: IAboutUs["_id"]): Promise<IAboutUs>;
+  updateAboutUsId(id: IAboutUs["_id"], data): Promise<IAboutUs>;
+  deleteAboutUsById(id: IAboutUs["_id"]): Promise<IAboutUs>;
 }
 
 export interface NewAboutUsparams {
