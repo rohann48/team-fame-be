@@ -1,6 +1,7 @@
 import express, { Response as ExResponse, Request as ExRequest } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 import http from "http";
 import dotenv from "dotenv";
 dotenv.config();
@@ -49,6 +50,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(hpp());
 mongoose.connect(process.env.MONGODB_URI!);
 mongoose.connection.on("error", (err: any) => {

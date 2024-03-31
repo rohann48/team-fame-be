@@ -2,12 +2,16 @@ import { Document, Model } from "mongoose";
 
 interface IClientSchema extends Document {
   _id: any;
+  avatar: string;
   name: string;
   lastName: string;
-  mobileNo: number;
+  contactNo: number;
   emailId: string;
   role: "admin" | "member" | "guest";
-  address: string;
+  address?: string;
+  password: string;
+  confirmPassword: string;
+  refferalCode: string;
 }
 
 //instance methods, virtuals
@@ -20,6 +24,21 @@ export interface IClient extends IClientBase {}
 export interface IClientPopulated extends IClient {}
 
 export interface IClientModel extends Model<IClient> {
-  getAllAssignedClients(matchQuery);
-  getClientInfo(matchQuery);
+  addClient(userData);
+  getClientsByQuery(matchQuery);
+  getClientInfoById(clientId: IClient["_id"]);
+  updateClientInfoById(clientId: IClient["_id"], data);
+  generateAuthToken(userData);
+  deleteClientById(clientId: IClient["_id"]);
+  getOneClientInfo(matchQuery: object, selectQuery: object);
+}
+
+export interface NewClientDataParams {
+  avatar?: IClient["avatar"];
+  name: IClient["name"];
+  lastName: IClient["lastName"];
+  contactNo: IClient["contactNo"];
+  emailId: IClient["emailId"];
+  password: IClient["password"];
+  confirmPassword: IClient["confirmPassword"];
 }

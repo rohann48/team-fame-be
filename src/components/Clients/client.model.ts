@@ -1,30 +1,49 @@
 import { Schema, model } from "mongoose";
 import { IClient, IClientModel } from "./client.interface";
+import jwt from "jsonwebtoken";
 
 export const ClientSchema: Schema = new Schema(
   {
+    avatar: {
+      type: String,
+    },
     name: {
       type: String,
       required: true,
     },
     lastName: String,
-    mobileNo: {
+    contactNo: {
       type: Number,
       required: true,
     },
-    emailId: String,
+    emailId: {
+      type: String,
+      required: "Email is required",
+      match: [
+        /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/,
+        "Please fill a valid email address",
+      ],
+    },
     role: {
       type: String,
+      default: "member",
       enum: ["admin", "member", "guest"],
     },
-    address: {
-      type: String,
-      required: true,
-    },
+    address: String,
     uid: {
       type: String,
-      required: true,
     },
+    password: {
+      type: String,
+      minlength: 8,
+      maxlength: 255,
+    },
+    confirmPassword: {
+      type: String,
+      minlength: 8,
+      maxlength: 255,
+    },
+    refferalCode: String,
   },
   {
     timestamps: true,
@@ -36,7 +55,22 @@ export const ClientSchema: Schema = new Schema(
 );
 
 ClientSchema.statics = {
-  getAllAssignedClients: async function (matchQuery) {
+  generateAuthToken: async function (userData) {
+    console.log("hello");
+
+    const jwtToken = await jwt.sign(
+      {
+        _id: userData._id,
+        name: userData.name,
+        role: userData.role,
+      },
+      "fame_jwtPrivateKey"
+      // process.env.JWTPRIVATEKEY
+      // {expiresIn: 60}
+    );
+    return jwtToken;
+  },
+  getClientsByQuery: async function (matchQuery) {
     try {
       const assignedClients = await this.find(matchQuery);
       // .populate("industryInfo", "name")
@@ -46,10 +80,53 @@ ClientSchema.statics = {
       throw err;
     }
   },
-  getClientInfo: async function (matchQuery) {
+  addClient: async function (userData) {
     try {
-      const clientDoc = await this.findById(matchQuery);
+      const clientDoc = new Client(userData);
+      const doc = await clientDoc.save();
+      return doc;
+    } catch (err) {
+      console.log(err);
 
+      throw err;
+    }
+  },
+  getClientInfoById: async function (clientId) {
+    try {
+      const clientDoc = await this.findById(clientId);
+
+      return clientDoc;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  getOneClientInfo: async function (matchQuery = {}, selectQuery = {}) {
+    try {
+      const clientDoc = await this.findOne(matchQuery).select(selectQuery);
+
+      return clientDoc;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateClientInfoById: async function (clientId, data) {
+    try {
+      const client = await this.findByIdAndUpdate(
+        clientId,
+        { $set: data },
+        { new: true }
+      );
+      return client;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  deleteClientById: async function (aboutId) {
+    try {
+      const clientDoc = await this.findByIdAndDelete(aboutId);
       return clientDoc;
     } catch (err) {
       throw err;
