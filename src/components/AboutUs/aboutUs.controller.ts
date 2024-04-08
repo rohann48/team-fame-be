@@ -11,6 +11,7 @@ import {
   SuccessResponse,
   Tags,
   Delete,
+  Security,
 } from "tsoa";
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
@@ -22,6 +23,7 @@ import { AboutUsService } from "./aboutUs.service";
 @Route("tf/aboutus")
 export class AboutUsController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Get()
   public async getActionPlansForSupplier() {
     try {
@@ -34,6 +36,7 @@ export class AboutUsController extends Controller {
   }
 
   @SuccessResponse(201, HttpResponseMessage.CREATED)
+  @Security("authenticate")
   @Post()
   public async createActionPlanForSupplier(
     @Request() req: express.Request,
@@ -51,6 +54,7 @@ export class AboutUsController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Put("{aboutId}")
   public async updateAboutUsId(@Path() aboutId, @Query() modifiedData) {
     try {
@@ -66,6 +70,7 @@ export class AboutUsController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.DELETED)
+  @Security("authenticate")
   @Delete("delete/{aboutId}")
   public async deleteAboutUsById(@Path() aboutId) {
     try {

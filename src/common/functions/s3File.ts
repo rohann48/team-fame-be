@@ -10,6 +10,8 @@ export class s3File {
   async addFile(originalFilename, filePath, docId, addFileDataToEntry) {
     return new Promise((resolve, reject) => {
       try {
+        console.log("s3Config", s3Config);
+
         // Initializing S3 Interface
         const s3 = new AWS.S3({
           accessKeyId: s3Config.accessKeyId,

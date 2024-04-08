@@ -11,6 +11,7 @@ import {
   SuccessResponse,
   Tags,
   Delete,
+  Security,
 } from "tsoa";
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
@@ -22,6 +23,7 @@ import { TestimonialService } from "./testimonial.service";
 @Route("tf/testimonial")
 export class TestimonialController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Get()
   public async getTestimonialList() {
     try {
@@ -33,6 +35,7 @@ export class TestimonialController extends Controller {
   }
 
   @SuccessResponse(201, HttpResponseMessage.CREATED)
+  @Security("authenticate")
   @Post()
   public async createTestimonial(
     @Request() req: express.Request,
@@ -52,6 +55,7 @@ export class TestimonialController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Get("{testimonialId}")
   public async getTestimonialById(@Path() testimonialId) {
     try {
@@ -65,6 +69,7 @@ export class TestimonialController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.DELETED)
+  @Security("authenticate")
   @Delete("delete/{aboutId}")
   public async deleteTestimonialById(@Path() aboutId) {
     try {

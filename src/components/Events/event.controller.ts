@@ -10,6 +10,7 @@ import {
   Put,
   SuccessResponse,
   Tags,
+  Security,
 } from "tsoa";
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
@@ -21,6 +22,7 @@ import { EventService } from "./event.service";
 @Route("tf/event")
 export class EventController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Get()
   public async getEvents() {
     try {
@@ -32,6 +34,7 @@ export class EventController extends Controller {
   }
 
   @SuccessResponse(201, HttpResponseMessage.CREATED)
+  @Security("authenticate")
   @Post()
   public async createEvent(
     @Request() req: express.Request,
@@ -49,6 +52,7 @@ export class EventController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Get("{eventId}")
   public async getEventById(@Path() eventId) {
     try {
@@ -60,6 +64,7 @@ export class EventController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.DELETED)
+  @Security("authenticate")
   @Get("delete/{eventId}")
   public async deleteEventById(@Path() eventId) {
     try {

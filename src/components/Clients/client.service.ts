@@ -87,7 +87,7 @@ export class ClientService {
       throw new Error("Invalid contactNo or password");
     }
     //jwt
-    const jwtToken = await Client.generateAuthToken(userData);
+    const jwtToken = await Client.generateAuthToken(userInfo);
     console.log(jwtToken);
     //cookie
     const cookieOptions = {

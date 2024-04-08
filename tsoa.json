@@ -1,7 +1,9 @@
 {
   "entryFile": "src/app.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/**/*.controller.ts"],
+  "controllerPathGlobs": [
+    "src/**/*.controller.ts"
+  ],
   "defaultModelsExpandDepth": -1,
   "spec": {
     "outputDirectory": "build",
@@ -9,7 +11,8 @@
   },
   "routes": {
     "routesDir": "build",
-    "middleware": "express"
+    "middleware": "express",
+    "authenticationModule": "src/common/middlewares/auth.ts"
   },
   "ignore": [
     "**/node_modules/sequelize/**",

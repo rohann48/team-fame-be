@@ -56,7 +56,7 @@ export const ClientSchema: Schema = new Schema(
 
 ClientSchema.statics = {
   generateAuthToken: async function (userData) {
-    console.log("hello");
+    console.log("hello", userData);
 
     const jwtToken = await jwt.sign(
       {

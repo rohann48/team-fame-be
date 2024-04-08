@@ -11,6 +11,7 @@ import {
   SuccessResponse,
   Tags,
   Delete,
+  Security,
 } from "tsoa";
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
@@ -21,6 +22,7 @@ import { ClientService } from "./client.service";
 @Route("tf/client")
 export class ClientController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Get()
   public async getClientsByQuery() {
     try {
@@ -50,6 +52,7 @@ export class ClientController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
   @Put("{clientId}")
   public async updateAboutUsId(@Path() clientId, @Query() modifiedData) {
     try {
@@ -65,6 +68,7 @@ export class ClientController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.DELETED)
+  @Security("authenticate")
   @Delete("delete/{clientId}")
   public async deleteAboutUsById(@Path() clientId) {
     try {
@@ -89,6 +93,8 @@ export class ClientController extends Controller {
       );
       return new HttpSuccess(HttpResponseMessage.CREATED, userInfo);
     } catch (error) {
+      console.log(error);
+
       throw new HttpException(400, error);
     }
   }
