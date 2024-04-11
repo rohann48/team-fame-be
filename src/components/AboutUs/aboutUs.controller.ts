@@ -23,7 +23,7 @@ import { AboutUsService } from "./aboutUs.service";
 @Route("tf/aboutus")
 export class AboutUsController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get()
   public async getActionPlansForSupplier() {
     try {

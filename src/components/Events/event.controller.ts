@@ -22,7 +22,7 @@ import { EventService } from "./event.service";
 @Route("tf/event")
 export class EventController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get()
   public async getEvents() {
     try {
@@ -52,7 +52,7 @@ export class EventController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get("{eventId}")
   public async getEventById(@Path() eventId) {
     try {

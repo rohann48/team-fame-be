@@ -8,4 +8,8 @@ export class VideoService {
     const data = await Video.getVideoList({});
     return data;
   }
+  async getVideoById(videoId) {
+    const data = await Video.getVideoById(videoId);
+    return data;
+  }
 }

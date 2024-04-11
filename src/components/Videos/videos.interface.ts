@@ -6,7 +6,7 @@ interface videoDetails {
   date: Date;
 }
 interface IVideoSchema extends Document {
-  _id: Types.ObjectId;
+  _id: any;
   title: string;
   description: string;
   videoInfo: Array<videoDetails>;

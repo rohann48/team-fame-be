@@ -33,6 +33,22 @@ VideoSchema.statics = {
       throw err;
     }
   },
+  getVideoById: async function (id) {
+    try {
+      const video = await this.findById(id);
+      return video;
+    } catch (err) {
+      throw err;
+    }
+  },
+  getVideoList: async function (matchQuery = {}) {
+    try {
+      const video = await this.find(matchQuery);
+      return video;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
 
 const Video: IVideoModel = model<IVideo, IVideoModel>("Video", VideoSchema);

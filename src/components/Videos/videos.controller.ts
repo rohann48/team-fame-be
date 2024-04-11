@@ -15,7 +15,7 @@ import {
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
 import { HttpException, HttpSuccess } from "../../common/helpers/HttpResponse";
-import { VideoService } from "./videos.services";
+import { VideoService } from "./videos.service";
 import formidable from "formidable";
 import { FileUploadSingleMutliMiddleWare } from "../../common/middlewares/fileStorageSingleMulti.middleware";
 
@@ -23,7 +23,7 @@ import { FileUploadSingleMutliMiddleWare } from "../../common/middlewares/fileSt
 @Route("tf/video")
 export class VideoController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get("/list")
   public async getVideos() {
     try {
@@ -34,7 +34,7 @@ export class VideoController extends Controller {
     }
   }
   @SuccessResponse(201, HttpResponseMessage.CREATED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Post()
   public async createVideo(@Request() req: express.Request) {
     function uploadFileToDocument(req) {
@@ -77,7 +77,21 @@ export class VideoController extends Controller {
       this.setStatus(201);
       return new HttpSuccess(HttpResponseMessage.CREATED, updateData);
     } catch (error) {
+      console.log("err", error);
       throw new HttpException(400);
+    }
+  }
+
+  @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  // @Security("authenticate")
+  @Get("{videoId}")
+  public async getVideosById(@Path() videoId) {
+    try {
+      const data = await new VideoService().getVideoById(videoId);
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(400, error);
     }
   }
 }

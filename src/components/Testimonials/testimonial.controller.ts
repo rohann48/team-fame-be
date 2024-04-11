@@ -23,7 +23,7 @@ import { TestimonialService } from "./testimonial.service";
 @Route("tf/testimonial")
 export class TestimonialController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get()
   public async getTestimonialList() {
     try {
@@ -55,7 +55,7 @@ export class TestimonialController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get("{testimonialId}")
   public async getTestimonialById(@Path() testimonialId) {
     try {
