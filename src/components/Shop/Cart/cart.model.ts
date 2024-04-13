@@ -8,17 +8,22 @@ const fileDetails = {
   date: Date,
 };
 
+const productInfo = {
+  productId: {
+    type: Schema.Types.ObjectId,
+    ref: "Product",
+  },
+  quantity: Number,
+};
+
 export const CartSchema: Schema = new Schema(
   {
-    name: String,
-    title: String,
-    description: String,
-    location: String,
-    status: String,
-    date: Date,
-    time: String,
-    image: String,
-    // image: fileDetails,
+    products: [productInfo],
+    clientId: {
+      type: Schema.Types.ObjectId,
+      ref: "Client",
+    },
+    isInCart: Boolean,
   },
   {
     timestamps: true,
@@ -28,6 +33,13 @@ export const CartSchema: Schema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+// CartSchema.virtual("productInfo", {
+//   ref: "Product",
+//   foreignField: "_id",
+//   localField: "products.productId",
+//   justOne: false,
+// });
 
 CartSchema.statics = {
   addCart: async function (data) {
@@ -57,9 +69,46 @@ CartSchema.statics = {
     }
   },
 
+  getCartByClientId: async function (clientId) {
+    try {
+      const carts = await this.findOne({ clientId }).populate(
+        "products.productId"
+      );
+      return carts;
+    } catch (err) {
+      throw err;
+    }
+  },
+
   deleteCartById: async function (cartId) {
     try {
       const response = await this.findByIdAndDelete(cartId);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateCartById: async function (cartId, data) {
+    try {
+      const response = await this.findByIdAndUpdate(cartId, data, {
+        new: true,
+      });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateCartByClientId: async function (clientId, data) {
+    try {
+      const response = await this.findOneAndUpdate(
+        { clientId: clientId },
+        data,
+        {
+          new: true,
+        }
+      );
       return response;
     } catch (err) {
       throw err;

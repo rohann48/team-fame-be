@@ -11,7 +11,8 @@ interface IClientSchema extends Document {
   address?: string;
   password: string;
   confirmPassword: string;
-  refferalCode: string;
+  referralCode: string;
+  membership: boolean;
 }
 
 //instance methods, virtuals

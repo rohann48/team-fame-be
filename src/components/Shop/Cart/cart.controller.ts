@@ -22,6 +22,7 @@ import {
 import { CartService } from "./cart.services";
 import formidable from "formidable";
 import { FileUploadSingleMutliMiddleWare } from "../../../common/middlewares/fileStorageSingleMulti.middleware";
+import { NewCartparams } from "./cart.interface";
 
 @Tags("Carts")
 @Route("tf/cart")
@@ -41,54 +42,15 @@ export class CartController extends Controller {
   @SuccessResponse(201, HttpResponseMessage.CREATED)
   @Security("authenticate")
   @Post()
-  public async createCart(@Request() req: express.Request) {
-    function uploadFileToDoc(req) {
-      return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm({ multiples: true });
-
-        form.parse(req, async (err, fields, files) => {
-          if (err) {
-            reject(err);
-          }
-          try {
-            /**Uploading the file to AWS s3 */
-            let fileUploadToS3;
-            let uploadedFileInfo = [];
-            if (files.fileToUpload) {
-              fileUploadToS3 =
-                await new FileUploadSingleMutliMiddleWare().addFile(
-                  files,
-                  fields.companyId
-                );
-
-              //Checking if there is multiple or single file info
-              if (Array.isArray(fileUploadToS3)) {
-                uploadedFileInfo.push(...fileUploadToS3);
-              } else {
-                uploadedFileInfo.push(fileUploadToS3);
-              }
-            }
-
-            // let response =
-            //   await new ActionPlanStepsService().updateUploadedFileToDoc(
-            //     fields.docId,
-            //     uploadedFileInfo,
-            //     fields
-            //   );
-            // resolve(response);
-          } catch (err) {
-            console.log(err);
-            reject(err);
-          }
-        });
-      });
-    }
+  public async createCart(
+    @Request() req: express.Request,
+    @Body() newCart: NewCartparams
+  ) {
     try {
-      const updateData = await uploadFileToDoc(req);
-      this.setStatus(201);
-      return new HttpSuccess(HttpResponseMessage.CREATED, updateData);
-    } catch (err) {
-      throw new HttpException(400);
+      const cart = await new CartService().addCart(newCart);
+      return new HttpSuccess(HttpResponseMessage.CREATED, cart);
+    } catch (error) {
+      let err: any = error;
     }
   }
 
@@ -104,6 +66,20 @@ export class CartController extends Controller {
     }
   }
 
+  @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  @Security("authenticate")
+  @Get("/list/client")
+  public async getCartByClientId(@Query() clientId) {
+    try {
+      const data = await new CartService().getCartByClientId(clientId);
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+
+      throw new HttpException(400, error);
+    }
+  }
+
   @SuccessResponse(200, HttpResponseMessage.DELETED)
   @Security("authenticate")
   @Get("delete/{cartId}")
@@ -112,6 +88,39 @@ export class CartController extends Controller {
       const data = await new CartService().deleteCartById(cartId);
       return new HttpSuccess(HttpResponseMessage.DELETED, data);
     } catch (error) {
+      throw new HttpException(400, error);
+    }
+  }
+
+  @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  // @Security("authenticate")
+  @Put("/product/quantity")
+  public async updateProductQuantity(@Query() clientId, @Body() modifiedData) {
+    try {
+      const data = await new CartService().updateProductQuantityById(
+        clientId,
+        modifiedData
+      );
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+
+      throw new HttpException(400, error);
+    }
+  }
+
+  // @Security("authenticate")
+  @Put("/product/cart")
+  public async removeProductFromCart(@Query() clientId, @Query() productId) {
+    try {
+      const data = await new CartService().removeProductCartById(
+        clientId,
+        productId
+      );
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+
       throw new HttpException(400, error);
     }
   }

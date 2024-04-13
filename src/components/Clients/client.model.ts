@@ -43,7 +43,11 @@ export const ClientSchema: Schema = new Schema(
       minlength: 8,
       maxlength: 255,
     },
-    refferalCode: String,
+    referralCode: String,
+    membership: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

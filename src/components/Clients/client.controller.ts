@@ -98,4 +98,19 @@ export class ClientController extends Controller {
       throw new HttpException(400, error);
     }
   }
+
+  @SuccessResponse(201, HttpResponseMessage.CREATED)
+  @Get("/auth/logout")
+  public async logoutUser(@Request() req: express.Request, @Query() clientId?) {
+    try {
+      // req["session"].destroy()
+      req.res.clearCookie("sessionID");
+      req.res.clearCookie("authToken");
+      return new HttpSuccess(HttpResponseMessage.CREATED, true);
+    } catch (error) {
+      console.log(error);
+
+      throw new HttpException(400, error);
+    }
+  }
 }

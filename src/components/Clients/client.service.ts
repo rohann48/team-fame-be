@@ -20,14 +20,14 @@ export class ClientService {
         d: "mm",
       });
 
-      // const salt = await bcrypt.genSalt(10);
-      // const passwordHash = await bcrypt.hash(userData.password, salt);
-      // userData.password = passwordHash;
-      // const confirmPasswordHash = await bcrypt.hash(
-      //   userData.confirmPassword,
-      //   salt
-      // );
-      // userData.confirmPassword = confirmPasswordHash;
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let referralCode = "fame-";
+      for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        referralCode += characters[randomIndex];
+      }
+      userData["referralCode"] = referralCode;
       const user = await Client.addClient(userData);
 
       //jwt

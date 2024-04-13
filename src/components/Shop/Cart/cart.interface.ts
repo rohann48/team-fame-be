@@ -1,21 +1,15 @@
 import { Document, Model } from "mongoose";
+import { IClient } from "../../Clients/client.interface";
+import { IProduct } from "../Products/products.interface";
 
-interface fileDetails {
-  name: String;
-  Key: String;
-  path: String;
-  date: Date;
+interface productInfo {
+  productId: IProduct["_id"];
+  quantity: number;
 }
 interface ICartSchema extends Document {
   _id: any;
-  name: string;
-  title: string;
-  description: string;
-  location: string;
-  status: string;
-  date: Date;
-  time: string;
-  image: string;
+  clientId: IClient["_id"];
+  products: Array<productInfo>;
   // fileDetails;
 }
 
@@ -33,15 +27,12 @@ export interface ICartModel extends Model<ICart> {
   getCartList(matchQuery: object): Promise<Array<ICart>>;
   getCartById(id: ICart["_id"]): Promise<ICart>;
   deleteCartById(id: ICart["_id"]): Promise<ICart>;
+  getCartByClientId(clientId: IClient["_id"]): Promise<ICart>;
+  updateCartById(cartId: ICart["_id"], data): Promise<ICart>;
+  updateCartByClientId(clientId: IClient["_id"], data): Promise<ICart>;
 }
 
 export interface NewCartparams {
-  name: ICart["name"];
-  title: ICart["title"];
-  description: ICart["description"];
-  location: ICart["location"];
-  status: ICart["status"];
-  image?: ICart["image"];
-  date: ICart["date"];
-  time: ICart["time"];
+  clientId: ICart["clientId"];
+  products: ICart["products"];
 }

@@ -91,7 +91,7 @@ export class ProductController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get("{productId}")
   public async getProductById(@Path() productId) {
     try {
