@@ -1,3 +1,4 @@
+import { ClientService } from "../../Clients/client.service";
 import Cart from "./cart.model";
 import { Types } from "mongoose";
 
@@ -7,6 +8,9 @@ export class CartService {
     let data;
     if (!prevCart) {
       data = await Cart.addCart(newCart);
+      await new ClientService().updateClientInfoById(newCart.clientId, {
+        cartId: data._id,
+      });
     } else {
       data = await this.updateCartById(prevCart._id, newCart.products);
     }

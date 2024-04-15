@@ -19,7 +19,7 @@ import {
   HttpSuccess,
 } from "../../../common/helpers/HttpResponse";
 //   import { NewCartparams } from "./shop.interface";
-import { CartService } from "./cart.services";
+import { CartService } from "./cart.service";
 import formidable from "formidable";
 import { FileUploadSingleMutliMiddleWare } from "../../../common/middlewares/fileStorageSingleMulti.middleware";
 import { NewCartparams } from "./cart.interface";

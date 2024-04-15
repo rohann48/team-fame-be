@@ -29,7 +29,10 @@ export const ClientSchema: Schema = new Schema(
       default: "member",
       enum: ["admin", "member", "guest"],
     },
-    address: String,
+    addressId: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
     uid: {
       type: String,
     },
@@ -47,6 +50,10 @@ export const ClientSchema: Schema = new Schema(
     membership: {
       type: Boolean,
       default: false,
+    },
+    cartId: {
+      type: Schema.Types.ObjectId,
+      ref: "Cart",
     },
   },
   {

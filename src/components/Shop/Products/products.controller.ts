@@ -19,7 +19,7 @@ import {
   HttpSuccess,
 } from "../../../common/helpers/HttpResponse";
 //   import { NewProductparams } from "./Product.interface";
-import { ProductService } from "./products.services";
+import { ProductService } from "./products.service";
 import formidable from "formidable";
 import { FileUploadSingleMutliMiddleWare } from "../../../common/middlewares/fileStorageSingleMulti.middleware";
 
