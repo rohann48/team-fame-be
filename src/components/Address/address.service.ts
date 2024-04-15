@@ -1,9 +1,17 @@
+import { ClientService } from "../Clients/client.service";
 import Address from "./address.model";
 
 export class AddressService {
   async addAddress(newAddress) {
-    const Data = await Address.addAddress(newAddress);
-    return Data;
+    const data = await Address.addAddress(newAddress);
+    const modifiedData = {
+      addressId: data._id,
+    };
+    await new ClientService().updateClientInfoById(
+      newAddress.clientId,
+      modifiedData
+    );
+    return data;
   }
 
   async getAllAddressList() {
