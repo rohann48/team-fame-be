@@ -67,6 +67,8 @@ ClientSchema.statics = {
         _id: userData._id,
         name: userData.name,
         role: userData.role,
+        email: userData.email,
+        contactNo: userData.contactNo,
       },
       "fame_jwtPrivateKey"
       // process.env.JWTPRIVATEKEY
