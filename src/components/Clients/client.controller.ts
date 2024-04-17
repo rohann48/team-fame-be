@@ -56,6 +56,7 @@ export class ClientController extends Controller {
   @Put("{clientId}")
   public async updateAboutUsId(@Path() clientId, @Query() modifiedData) {
     try {
+      console.log(modifiedData);
       const data = await new ClientService().updateClientInfoById(
         clientId,
         modifiedData
@@ -110,6 +111,23 @@ export class ClientController extends Controller {
     } catch (error) {
       console.log(error);
 
+      throw new HttpException(400, error);
+    }
+  }
+  //get single user
+  @SuccessResponse(201, HttpResponseMessage.CREATED)
+  @Get("/clientId")
+  public async getClientById(
+    @Request() req: express.Request,
+    @Query() clientId: string
+  ) {
+    try {
+      const userInfo = req.session["userInfo"];
+      console.log(userInfo);
+      const data = await new ClientService().getClientInfoById(clientId);
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
       throw new HttpException(400, error);
     }
   }

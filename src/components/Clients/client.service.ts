@@ -101,6 +101,8 @@ export class ClientService {
       name: userInfo.name,
       lastName: userInfo.lastName,
       role: userInfo.role,
+      contactNo: userInfo.contactNo,
+      emailId: userInfo.emailId,
     };
     // res.send(token)
   }
