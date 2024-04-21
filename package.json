@@ -10,7 +10,7 @@
     "start": "ts-node src/app.ts",
     "dev-start": "nodemon src/app.ts",
     "dev-start-debug": "nodemon -L -e ts,js,json --exec node --inspect=0.0.0.0:9221 --require ts-node/register src/app.ts",
-    "heroku-postbuild": "npm install && npm run build"
+    "heroku-postbuild": "tsoa spec-and-routes && tsc && npm install && npm run build"
   },
   "engines": {
     "node": "18.16.1",
