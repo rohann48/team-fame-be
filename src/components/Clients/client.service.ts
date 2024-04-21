@@ -14,11 +14,11 @@ export class ClientService {
 
     try {
       // const avatar = "http://profiles.google.com/s2/photos/profile/" + data.email + "?sz=" + 80;
-      const avatar = gravatar.url(userData.email, {
-        s: "80",
-        r: "pg",
-        d: "mm",
-      });
+      // const avatar = gravatar.url(userData.email, {
+      //   s: "80",
+      //   r: "pg",
+      //   d: "mm",
+      // });
 
       const characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

@@ -42,7 +42,6 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/ftp": "^0.3.33",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/swagger-ui": "^3.52.0",
     "nodemon": "^3.0.0",
