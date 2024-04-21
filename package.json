@@ -21,6 +21,7 @@
   "dependencies": {
     "@types/express": "^4.17.14",
     "@types/express-session": "^1.17.5",
+    "@types/multer": "^1.4.7",
     "aws-amplify": "^5.3.11",
     "aws-sdk": "^2.1354.0",
     "axios": "^1.2.0",
