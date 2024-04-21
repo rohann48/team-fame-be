@@ -45,7 +45,6 @@
   "devDependencies": {
     "@types/ftp": "^0.3.33",
     "@types/jsonwebtoken": "^9.0.6",
-    "@types/multer": "^1.4.7",
     "@types/swagger-ui": "^3.52.0",
     "nodemon": "^3.0.0",
     "swagger-ui": "^4.15.5"
