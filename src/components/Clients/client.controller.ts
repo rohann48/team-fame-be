@@ -54,7 +54,7 @@ export class ClientController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   @Security("authenticate")
   @Put("{clientId}")
-  public async updateAboutUsId(@Path() clientId, @Query() modifiedData) {
+  public async updateAboutUsId(@Path() clientId, @Body() modifiedData) {
     try {
       console.log(modifiedData);
       const data = await new ClientService().updateClientInfoById(
