@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { IAddress, IAddressModel } from "./address.interface";
-import jwt from "jsonwebtoken";
 
 export const AddressSchema: Schema = new Schema(
   {

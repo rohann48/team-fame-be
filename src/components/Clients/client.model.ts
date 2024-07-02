@@ -55,6 +55,10 @@ export const ClientSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Cart",
     },
+    goldSchemeId: {
+      type: Schema.Types.ObjectId,
+      ref: "GoldScheme",
+    },
   },
   {
     timestamps: true,

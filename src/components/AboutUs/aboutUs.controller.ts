@@ -36,7 +36,7 @@ export class AboutUsController extends Controller {
   }
 
   @SuccessResponse(201, HttpResponseMessage.CREATED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Post()
   public async createActionPlanForSupplier(
     @Request() req: express.Request,
