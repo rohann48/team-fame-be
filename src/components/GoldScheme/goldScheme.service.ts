@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ClientService } from "../Clients/client.service";
 import GoldScheme from "./goldScheme.model";
 
@@ -16,9 +17,11 @@ export class GoldSchemeService {
   }
 
   async getGoldSchemeByQuery(clientId) {
+    console.log(clientId, "cc");
     const matchQuery = {
-      clientId: clientId,
+      clientId: new Types.ObjectId(clientId),
     };
+    console.log(matchQuery, "mat");
     const data = await GoldScheme.getGoldSchemeByQuery(matchQuery);
     return data;
   }

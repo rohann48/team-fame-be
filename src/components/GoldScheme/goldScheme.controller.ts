@@ -97,8 +97,8 @@ export class GoldSchemeController extends Controller {
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   // @Security("authenticate")
-  @Get("{clientId}")
-  public async getGoldSchemeByCLientId(@Query() clientId) {
+  @Get("scheme/{clientId}")
+  public async getGoldSchemeByCLientId(@Path() clientId) {
     try {
       const data = await new GoldSchemeService().getGoldSchemeByQuery(clientId);
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
