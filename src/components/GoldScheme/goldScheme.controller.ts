@@ -42,7 +42,7 @@ export class GoldSchemeController extends Controller {
   @SuccessResponse(201, HttpResponseMessage.CREATED)
   // @Security("authenticate")
   @Post()
-  public async createActionPlanForSupplier(
+  public async addGoldScheme(
     @Request() req: express.Request,
     @Body() newData: NewGoldSchemeParams
   ) {
