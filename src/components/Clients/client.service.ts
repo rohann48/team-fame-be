@@ -106,6 +106,7 @@ export class ClientService {
       role: userInfo.role,
       contactNo: userInfo.contactNo,
       emailId: userInfo.emailId,
+      membership: userInfo.membership,
       goldSchemeId: userInfo?.["goldSchemeId"],
     };
     // res.send(token)

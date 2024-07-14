@@ -78,6 +78,7 @@ ClientSchema.statics = {
         role: userData.role,
         email: userData.email,
         contactNo: userData.contactNo,
+        membership: userData.membership,
         goldSchemeId: userData.goldSchemeId,
       },
       "fame_jwtPrivateKey"
