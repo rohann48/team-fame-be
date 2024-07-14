@@ -76,7 +76,7 @@ export class ClientService {
       contactNo: Number(userData.contactNo),
     };
 
-    const selectQuery = { confirmPassword: 0 };
+    const selectQuery = { confirmPassword: 0, referralCode: 0 };
     const userInfo = await this.getOneClientInfo(matchQuery, selectQuery);
 
     if (!userInfo) {
@@ -103,6 +103,7 @@ export class ClientService {
       role: userInfo.role,
       contactNo: userInfo.contactNo,
       emailId: userInfo.emailId,
+      goldSchemeId: userInfo?.goldSchemeId || null,
     };
     // res.send(token)
   }

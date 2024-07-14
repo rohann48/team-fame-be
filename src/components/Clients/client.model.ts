@@ -71,8 +71,6 @@ export const ClientSchema: Schema = new Schema(
 
 ClientSchema.statics = {
   generateAuthToken: async function (userData) {
-    console.log("hello", userData);
-
     const jwtToken = await jwt.sign(
       {
         _id: userData._id,
@@ -80,6 +78,7 @@ ClientSchema.statics = {
         role: userData.role,
         email: userData.email,
         contactNo: userData.contactNo,
+        goldSchemeId: userData.goldSchemeId,
       },
       "fame_jwtPrivateKey"
       // process.env.JWTPRIVATEKEY
@@ -110,8 +109,9 @@ ClientSchema.statics = {
   },
   getClientInfoById: async function (clientId) {
     try {
-      const clientDoc = await this.findById(clientId);
-
+      const clientDoc = await this.findById(clientId).select(
+        "-password -confirmPassword"
+      );
       return clientDoc;
     } catch (err) {
       throw err;
