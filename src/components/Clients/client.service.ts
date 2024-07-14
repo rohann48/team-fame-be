@@ -94,6 +94,9 @@ export class ClientService {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), //+days*24hr*60min*60sec*1000ms
     };
+    if (!userInfo?.["goldSchemeId"]) {
+      userInfo["goldSchemeId"] = null;
+    }
     req["session"].userInfo = userInfo.toObject();
     req.res.cookie("authToken", jwtToken, cookieOptions);
     return {
@@ -103,7 +106,7 @@ export class ClientService {
       role: userInfo.role,
       contactNo: userInfo.contactNo,
       emailId: userInfo.emailId,
-      goldSchemeId: userInfo?.goldSchemeId || null,
+      goldSchemeId: userInfo?.["goldSchemeId"],
     };
     // res.send(token)
   }

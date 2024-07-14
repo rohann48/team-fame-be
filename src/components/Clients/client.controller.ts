@@ -116,7 +116,7 @@ export class ClientController extends Controller {
             name: req["session"]["userInfo"].name,
             role: req["session"]["userInfo"].role,
             _id: req["session"]["userInfo"]._id,
-            goldSchemeId: req["session"]["userInfo"]?.goldSchemeId,
+            goldSchemeId: req["session"]["userInfo"]?.goldSchemeId || null,
           },
         };
       } else {
