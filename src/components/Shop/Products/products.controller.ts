@@ -57,7 +57,7 @@ export class ProductController extends Controller {
             console.log("files", files);
             console.log("fields", fields);
 
-            if (files.fileToUpload) {
+            if (files?.fileToUpload) {
               fileUploadToS3 =
                 await new FileUploadSingleMutliMiddleWare().addFile(
                   files,
@@ -86,6 +86,8 @@ export class ProductController extends Controller {
       this.setStatus(201);
       return new HttpSuccess(HttpResponseMessage.CREATED, updateData);
     } catch (err) {
+      console.log(err);
+
       throw new HttpException(400);
     }
   }
