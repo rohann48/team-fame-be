@@ -56,7 +56,6 @@ export class ClientController extends Controller {
   @Put("{clientId}")
   public async updateAboutUsId(@Path() clientId, @Body() modifiedData) {
     try {
-      console.log(modifiedData);
       const data = await new ClientService().updateClientInfoById(
         clientId,
         modifiedData

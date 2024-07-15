@@ -54,7 +54,6 @@ export class ProductController extends Controller {
             /**Uploading the file to AWS s3 */
             let fileUploadToS3;
             let uploadedFileInfo = [];
-            console.log("files", files);
             console.log("fields", fields);
 
             if (files?.fileToUpload) {
