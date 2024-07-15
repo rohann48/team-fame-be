@@ -1,7 +1,8 @@
 import { Document, Model } from "mongoose";
 
 interface IOfferSchema extends Document {
-  offers: string[];
+  refferalCodes: string[];
+  appliedCodes: string[];
 }
 
 //instance methods, virtuals
@@ -14,10 +15,9 @@ export interface IOffer extends IOfferBase {}
 export interface IOfferPopulated extends IOffer {}
 
 export interface IOfferModel extends Model<IOffer> {
-  addOffer(data: NewOfferParams): Promise<IOffer>;
-  getOfferList(matchQuery: object): Promise<Array<IOffer>>;
-  getOfferById(id: IOffer["_id"]): Promise<IOffer>;
-  updateOfferById(OfferId: IOffer["_id"], data): Promise<IOffer>;
+  addOfferRefferalCode(data: NewOfferParams): Promise<IOffer>;
+  getRefferalCodeList(matchQuery: object): Promise<Array<IOffer>>;
+  updateOfferRefferalById(OfferId: IOffer["_id"], data): Promise<IOffer>;
 }
 
 export interface NewOfferParams {}

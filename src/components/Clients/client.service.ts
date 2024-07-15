@@ -1,6 +1,7 @@
 import Client from "./client.model";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
+import { OfferService } from "../Shop/Offers/offer.service";
 export class ClientService {
   async userSignup(userData, req) {
     const matchQuery = {
@@ -28,6 +29,10 @@ export class ClientService {
         referralCode += characters[randomIndex];
       }
       userData["referralCode"] = referralCode;
+      const referral = {
+        refferalCodes: [referralCode],
+      };
+      await new OfferService().addOfferRefferalCode(referral);
       const user = await Client.addClient(userData);
 
       //jwt
@@ -63,6 +68,15 @@ export class ClientService {
 
   async updateClientInfoById(clientId, modifiedData) {
     const data = await Client.updateClientInfoById(clientId, modifiedData);
+    return data;
+  }
+
+  async updateClientMembership(clientId) {
+    const data = await this.getClientInfoById(clientId);
+    if (!data.membership) {
+      data.membership = true;
+      await data.save();
+    }
     return data;
   }
 
