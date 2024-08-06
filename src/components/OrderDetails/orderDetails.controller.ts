@@ -16,18 +16,19 @@ import {
 import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
 import { HttpException, HttpSuccess } from "../../common/helpers/HttpResponse";
-import { NewAboutUsparams } from "./aboutUs.interface";
-import { AboutUsService } from "./aboutUs.service";
+import { NewOrderDetailParams } from "./orderDetails.interface";
+import { OrderDetailsService } from "./orderDetails.service";
+import { Types } from "mongoose";
 
-@Tags("AboutUs")
-@Route("tf/aboutus")
-export class AboutUsController extends Controller {
+@Tags("OrderDetails")
+@Route("tf/order-details")
+export class OrderDetailsController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   // @Security("authenticate")
-  @Get()
-  public async getActionPlansForSupplier() {
+  @Get("/list")
+  public async getOrderDetailList() {
     try {
-      const data = await new AboutUsService().getAboutUsList({});
+      const data = await new OrderDetailsService().getOrderDetailList({});
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       console.log(error);
@@ -38,12 +39,12 @@ export class AboutUsController extends Controller {
   @SuccessResponse(201, HttpResponseMessage.CREATED)
   // @Security("authenticate")
   @Post()
-  public async createActionPlanForSupplier(
+  public async addOrderDetails(
     @Request() req: express.Request,
-    @Body() newData
+    @Body() newData: NewOrderDetailParams
   ) {
     try {
-      const doc = await new AboutUsService().addAboutUs(newData);
+      const doc = await new OrderDetailsService().addOrderDetails(newData);
       return new HttpSuccess(HttpResponseMessage.CREATED, doc);
     } catch (error) {
       let err: any = error;
@@ -54,28 +55,17 @@ export class AboutUsController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
-  @Put("{aboutId}")
-  public async updateAboutUsId(@Path() aboutId, @Query() modifiedData) {
+  // @Security("authenticate")
+  @Get("selected/{clientId}")
+  public async getOrderDetailsByCLientId(@Path() clientId) {
     try {
-      const data = await new AboutUsService().updateAboutUsId(
-        aboutId,
-        modifiedData
+      const matchQuery = {
+        clientId: new Types.ObjectId(clientId),
+      };
+      const data = await new OrderDetailsService().getOrderDetailsByQuery(
+        matchQuery
       );
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(400, error);
-    }
-  }
-
-  @SuccessResponse(200, HttpResponseMessage.DELETED)
-  @Security("authenticate")
-  @Delete("delete/{aboutId}")
-  public async deleteAboutUsById(@Path() aboutId) {
-    try {
-      const data = await new AboutUsService().deleteAboutUsById(aboutId);
-      return new HttpSuccess(HttpResponseMessage.DELETED, data);
     } catch (error) {
       console.log(error);
       throw new HttpException(400, error);

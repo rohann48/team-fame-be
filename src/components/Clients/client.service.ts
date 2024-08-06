@@ -1,6 +1,7 @@
 import Client from "./client.model";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
+import { OfferService } from "../Shop/Offers/offer.service";
 export class ClientService {
   async userSignup(userData, req) {
     const matchQuery = {
@@ -28,6 +29,10 @@ export class ClientService {
         referralCode += characters[randomIndex];
       }
       userData["referralCode"] = referralCode;
+      const referral = {
+        refferalCodes: [referralCode],
+      };
+      await new OfferService().addOfferRefferalCode(referral);
       const user = await Client.addClient(userData);
 
       //jwt
@@ -66,6 +71,15 @@ export class ClientService {
     return data;
   }
 
+  async updateClientMembership(clientId) {
+    const data = await this.getClientInfoById(clientId);
+    if (!data.membership) {
+      data.membership = true;
+      await data.save();
+    }
+    return data;
+  }
+
   async deleteClientById(clientId) {
     const data = await Client.deleteClientById(clientId);
     return data;
@@ -76,7 +90,7 @@ export class ClientService {
       contactNo: Number(userData.contactNo),
     };
 
-    const selectQuery = { confirmPassword: 0 };
+    const selectQuery = { confirmPassword: 0, referralCode: 0 };
     const userInfo = await this.getOneClientInfo(matchQuery, selectQuery);
 
     if (!userInfo) {
@@ -94,6 +108,9 @@ export class ClientService {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), //+days*24hr*60min*60sec*1000ms
     };
+    if (!userInfo?.["goldSchemeId"]) {
+      userInfo["goldSchemeId"] = null;
+    }
     req["session"].userInfo = userInfo.toObject();
     req.res.cookie("authToken", jwtToken, cookieOptions);
     return {
@@ -103,6 +120,8 @@ export class ClientService {
       role: userInfo.role,
       contactNo: userInfo.contactNo,
       emailId: userInfo.emailId,
+      membership: userInfo.membership,
+      goldSchemeId: userInfo?.["goldSchemeId"],
     };
     // res.send(token)
   }

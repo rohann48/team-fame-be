@@ -54,9 +54,8 @@ export class ClientController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   @Security("authenticate")
   @Put("{clientId}")
-  public async updateAboutUsId(@Path() clientId, @Query() modifiedData) {
+  public async updateAboutUsId(@Path() clientId, @Body() modifiedData) {
     try {
-      console.log(modifiedData);
       const data = await new ClientService().updateClientInfoById(
         clientId,
         modifiedData
@@ -100,11 +99,45 @@ export class ClientController extends Controller {
     }
   }
 
+  @SuccessResponse("200", HttpResponseMessage.FETCHED)
+  @Get("auth/check")
+  public async validateAuthenticationCheck(@Request() req: express.Request) {
+    try {
+      let response;
+      /**returning user info, if the user has a session  */
+      if (req["session"]["userInfo"]) {
+        response = {
+          userInfo: {
+            contactNo: req["session"]["userInfo"].contactNo,
+            emailId: req["session"]["userInfo"].emailId,
+            lastName: req["session"]["userInfo"].lastName,
+            membership: req["session"]["userInfo"].membership,
+            name: req["session"]["userInfo"].name,
+            role: req["session"]["userInfo"].role,
+            _id: req["session"]["userInfo"]._id,
+            goldSchemeId: req["session"]["userInfo"]?.goldSchemeId || null,
+          },
+        };
+      } else {
+        response = null;
+      }
+      return new HttpSuccess(HttpResponseMessage.FETCHED, response);
+    } catch (error) {
+      throw new HttpException(400, error);
+    }
+  }
+
   @SuccessResponse(201, HttpResponseMessage.CREATED)
   @Get("/auth/logout")
   public async logoutUser(@Request() req: express.Request, @Query() clientId?) {
     try {
       // req["session"].destroy()
+      let isLogoutSuccess = true;
+      req["session"].destroy((err) => {
+        if (err) {
+          isLogoutSuccess = true;
+        }
+      });
       req.res.clearCookie("sessionID");
       req.res.clearCookie("authToken");
       return new HttpSuccess(HttpResponseMessage.CREATED, true);

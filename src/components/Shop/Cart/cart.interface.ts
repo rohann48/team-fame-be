@@ -10,6 +10,7 @@ interface ICartSchema extends Document {
   _id: any;
   clientId: IClient["_id"];
   products: Array<productInfo>;
+  isInCart: boolean;
   // fileDetails;
 }
 
@@ -35,4 +36,5 @@ export interface ICartModel extends Model<ICart> {
 export interface NewCartparams {
   clientId: ICart["clientId"];
   products: ICart["products"];
+  isInCart?: ICart["isInCart"];
 }
