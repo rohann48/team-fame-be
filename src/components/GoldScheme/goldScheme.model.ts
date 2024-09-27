@@ -54,7 +54,17 @@ GoldSchemeSchema.statics = {
       throw err;
     }
   },
-
+  getGoldSchemeAllList: async function (matchQuery) {
+    try {
+      const goldScheme = await this.find(matchQuery).populate({
+        path: "clientId",
+        select: ["name"],
+      });
+      return goldScheme;
+    } catch (err) {
+      throw err;
+    }
+  },
   getGoldSchemeById: async function (query) {
     try {
       const goldScheme = await this.findById(query);

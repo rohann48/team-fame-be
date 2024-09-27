@@ -36,6 +36,7 @@ export interface IGoldSchemeModel extends Model<IGoldScheme> {
   ): Promise<IGoldScheme>;
   updateSchemeById(docId: IGoldScheme["_id"], data);
   getGoldSchemeByQuery(matchQuery: object);
+  getGoldSchemeAllList(matchQuery: object);
 }
 
 export interface NewGoldSchemeParams {

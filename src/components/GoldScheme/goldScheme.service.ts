@@ -15,6 +15,10 @@ export class GoldSchemeService {
     const data = await GoldScheme.getGoldSchemeList(matchQuery);
     return data;
   }
+  async getGoldSchemeAllList(matchQuery) {
+    const data = await GoldScheme.getGoldSchemeAllList(matchQuery);
+    return data;
+  }
 
   async getGoldSchemeByQuery(clientId) {
     console.log(clientId, "cc");

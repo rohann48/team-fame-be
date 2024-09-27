@@ -38,7 +38,19 @@ export class GoldSchemeController extends Controller {
       throw new HttpException(400, error);
     }
   }
-
+  @Get("/all-scheme")
+  public async getGoldSchemeAllList(
+    @Request() req: express.Request,
+    @Query() clientId: string
+  ) {
+    try {
+      const data = await new GoldSchemeService().getGoldSchemeAllList({});
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(400, error);
+    }
+  }
   @SuccessResponse(201, HttpResponseMessage.CREATED)
   // @Security("authenticate")
   @Post()
