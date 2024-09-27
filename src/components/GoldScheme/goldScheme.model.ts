@@ -56,10 +56,10 @@ GoldSchemeSchema.statics = {
   },
   getGoldSchemeAllList: async function (matchQuery) {
     try {
-      const goldScheme = await this.find(matchQuery).populate({
-        path: "clientId",
-        select: ["name"],
-      });
+      const goldScheme = await this.find(matchQuery).populate(
+        "clientId",
+        "name contactNo"
+      );
       return goldScheme;
     } catch (err) {
       throw err;
