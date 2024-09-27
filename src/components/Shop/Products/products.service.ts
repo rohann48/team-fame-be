@@ -20,4 +20,8 @@ export class ProductService {
     const data = await Product.deleteProductById(productId);
     return data;
   }
+  async deleteProduct(docId) {
+    const data = await Product.deleteProductById(docId);
+    return data;
+  }
 }

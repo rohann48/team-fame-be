@@ -86,16 +86,17 @@ export class ClientController extends Controller {
     @Request() req: express.Request,
     @Body() userData
   ) {
+    console.log("hi");
     try {
       const userInfo = await new ClientService().authenticateUser(
         userData,
         req
       );
       return new HttpSuccess(HttpResponseMessage.CREATED, userInfo);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
 
-      throw new HttpException(400, error);
+      throw new HttpException(400, error, error?.message);
     }
   }
 

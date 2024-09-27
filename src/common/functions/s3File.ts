@@ -135,4 +135,36 @@ export class s3File {
       throw error;
     }
   }
+  async deleteFileOnlyFromS3(delFileKey) {
+    return new Promise((resolve, reject) => {
+      try {
+        // Initializing S3 Interface
+        const s3 = new AWS.S3({
+          accessKeyId: process.env.AWS_ACCESSKEYID,
+          secretAccessKey: process.env.AWS_SECRETKEYID,
+        });
+
+        const params = {
+          Bucket: s3Config.bucketName,
+          Delete: {
+            // required
+            Objects:
+              // required
+              [{ Key: delFileKey }],
+          },
+        };
+        s3.deleteObjects(params, async function (err, data) {
+          if (err) {
+            reject(err);
+          }
+          // an error occurred
+          else {
+            resolve(data);
+          } // successful response
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }

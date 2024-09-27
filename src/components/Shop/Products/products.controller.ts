@@ -11,6 +11,7 @@ import {
   SuccessResponse,
   Tags,
   Security,
+  Delete,
 } from "tsoa";
 import express from "express";
 import { HttpResponseMessage } from "../../../common/constants/httpResponseMessage.enum";
@@ -22,6 +23,7 @@ import {
 import { ProductService } from "./products.service";
 import formidable from "formidable";
 import { FileUploadSingleMutliMiddleWare } from "../../../common/middlewares/fileStorageSingleMulti.middleware";
+import { s3File } from "../../../common/functions/s3File";
 
 @Tags("Products")
 @Route("tf/shop/product")
@@ -31,6 +33,8 @@ export class ProductController extends Controller {
   @Get("/list")
   public async getProducts() {
     try {
+      console.log("userData");
+
       const data = await new ProductService().getAllProductList();
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
@@ -42,7 +46,6 @@ export class ProductController extends Controller {
   @Security("authenticate")
   @Post()
   public async createProduct(@Request() req: express.Request) {
-    console.log("hello");
     function uploadFileToDoc(req) {
       return new Promise((resolve, reject) => {
         const form = new formidable.IncomingForm();
@@ -90,6 +93,24 @@ export class ProductController extends Controller {
       throw new HttpException(400);
     }
   }
+  @SuccessResponse(201, HttpResponseMessage.DELETED)
+  @Security("authenticate")
+  @Delete("/delete")
+  public async deleteProduct(
+    @Request() req: express.Request,
+    @Query() docId,
+    @Query() fileKey
+  ) {
+    try {
+      if (fileKey.length) {
+        await new s3File().deleteFileOnlyFromS3(fileKey);
+      }
+      const doc = await new ProductService().deleteProduct(docId);
+      return new HttpSuccess(HttpResponseMessage.DELETED, doc);
+    } catch (error: any) {
+      throw new HttpException(400, error, error?.message);
+    }
+  }
 
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   // @Security("authenticate")
@@ -103,15 +124,15 @@ export class ProductController extends Controller {
     }
   }
 
-  @SuccessResponse(200, HttpResponseMessage.DELETED)
-  @Security("authenticate")
-  @Get("delete/{productId}")
-  public async deleteProductById(@Path() productId) {
-    try {
-      const data = await new ProductService().deleteProductById(productId);
-      return new HttpSuccess(HttpResponseMessage.DELETED, data);
-    } catch (error) {
-      throw new HttpException(400, error);
-    }
-  }
+  // @SuccessResponse(200, HttpResponseMessage.DELETED)
+  // @Security("authenticate")
+  // @Get("delete/{productId}")
+  // public async deleteProductById(@Path() productId) {
+  //   try {
+  //     const data = await new ProductService().deleteProductById(productId);
+  //     return new HttpSuccess(HttpResponseMessage.DELETED, data);
+  //   } catch (error) {
+  //     throw new HttpException(400, error);
+  //   }
+  // }
 }

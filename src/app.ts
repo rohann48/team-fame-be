@@ -21,24 +21,24 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const app = express();
 
 // Certificate
-const privateKey = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/privkey.pem",
-  "utf8"
-);
-const certificate = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/cert.pem",
-  "utf8"
-);
-const ca = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/chain.pem",
-  "utf8"
-);
+// const privateKey = fs.readFileSync(
+//   "/etc/letsencrypt/live/api.team-fame.com/privkey.pem",
+//   "utf8"
+// );
+// const certificate = fs.readFileSync(
+//   "/etc/letsencrypt/live/api.team-fame.com/cert.pem",
+//   "utf8"
+// );
+// const ca = fs.readFileSync(
+//   "/etc/letsencrypt/live/api.team-fame.com/chain.pem",
+//   "utf8"
+// );
 
-const credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: ca,
-};
+// const credentials = {
+//   key: privateKey,
+//   cert: certificate,
+//   ca: ca,
+// };
 
 app.use(helmet());
 app.use((req, res, next) => {
@@ -88,7 +88,7 @@ let httpsServer;
 if (process.env.NODE_ENV === "development") {
   server = new http.Server(app);
 } else {
-  httpsServer = new https.Server(credentials, app);
+  // httpsServer = new https.Server(credentials, app);
 }
 app.use(
   "/tf/docs",
@@ -233,9 +233,9 @@ if (process.env.NODE_ENV === "development") {
     console.log(`Server running on port ${port}`);
   });
 } else {
-  httpsServer.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
+  // httpsServer.listen(port, () => {
+  //   console.log(`Server running on port ${port}`);
+  // });
 }
 
 /** to catch any unhandled promise rejection */
