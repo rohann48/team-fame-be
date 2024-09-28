@@ -13,7 +13,7 @@ export const TestimonialSchema: Schema = new Schema(
     name: String,
     about: String,
     achievement: String,
-    image: String,
+    imageInfo: [fileDetails],
     // image: fileDetails,
   },
   {

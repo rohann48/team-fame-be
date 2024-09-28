@@ -11,8 +11,7 @@ interface ITestimonialSchema extends Document {
   name: string;
   about: string;
   achievement: string;
-  image: string;
-  // fileDetails;
+  imageInfo: [fileDetails];
 }
 
 //instance methods, virtuals
@@ -35,5 +34,5 @@ export interface NewTestimonialparams {
   name: ITestimonial["name"];
   about: ITestimonial["about"];
   achievement: ITestimonial["achievement"];
-  image?: ITestimonial["image"];
+  imageInfo?: [fileDetails];
 }

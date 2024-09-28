@@ -15,8 +15,7 @@ interface IEventSchema extends Document {
   status: string;
   date: Date;
   time: string;
-  image: string;
-  // fileDetails;
+  imageInfo: [fileDetails];
 }
 
 //instance methods, virtuals
@@ -41,7 +40,6 @@ export interface NewEventparams {
   description: IEvent["description"];
   location: IEvent["location"];
   status: IEvent["status"];
-  image?: IEvent["image"];
   date: IEvent["date"];
   time: IEvent["time"];
 }

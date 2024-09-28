@@ -17,8 +17,7 @@ export const EventSchema: Schema = new Schema(
     status: String,
     date: Date,
     time: String,
-    image: String,
-    // image: fileDetails,
+    imageInfo: [fileDetails],
   },
   {
     timestamps: true,
