@@ -19,9 +19,17 @@ export class OfferService {
   }
 
   async validateRefferalCode(code) {
+    console.log(code);
+
     const data = await this.getRefferalCodeList({});
-    if (data[0].appliedCodes.includes(code)) {
-      return false;
+    console.log("data", data);
+    if (code !== null) {
+      //above condition for first user
+      if (data[0].refferalCodes.includes(code)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return true;
     }

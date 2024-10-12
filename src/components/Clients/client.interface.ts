@@ -13,6 +13,9 @@ interface IClientSchema extends Document {
   confirmPassword: string;
   referralCode: string;
   membership: boolean;
+  shopVoucher: {
+    invitedRefferal: string;
+  };
 }
 
 //instance methods, virtuals
@@ -42,4 +45,5 @@ export interface NewClientDataParams {
   emailId: IClient["emailId"];
   password: IClient["password"];
   confirmPassword: IClient["confirmPassword"];
+  shopVoucher: IClient["shopVoucher"]["invitedRefferal"];
 }

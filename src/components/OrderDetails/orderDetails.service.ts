@@ -21,6 +21,7 @@ export class OrderDetailsService {
       pincode: newDetails.pincode,
       amount: newDetails.amount,
       paymentMode: newDetails.paymentMode,
+      orderDetails: newDetails.orderDetails,
     };
     const data = await OrderDetails.addOrderDetails(newData);
     new ClientService().updateClientMembership(newDetails.clientId);

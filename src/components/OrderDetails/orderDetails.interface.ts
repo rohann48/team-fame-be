@@ -14,6 +14,14 @@ interface IOrderDetailSchema extends Document {
   pincode: number;
   amount: number;
   paymentMode: string;
+  orderDetails: Array<{
+    name: string;
+    price: number;
+    quantity: number;
+    offers: {
+      cashback: number;
+    };
+  }>;
 }
 
 //instance methods, virtuals
@@ -43,4 +51,5 @@ export interface NewOrderDetailParams {
   amount: IOrderDetail["amount"];
   paymentMode: IOrderDetail["paymentMode"];
   code?: string;
+  orderDetails: IOrderDetail["orderDetails"];
 }

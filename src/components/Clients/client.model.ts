@@ -59,6 +59,9 @@ export const ClientSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "GoldScheme",
     },
+    shopVoucher: {
+      invitedRefferal: String,
+    },
   },
   {
     timestamps: true,
@@ -80,6 +83,7 @@ ClientSchema.statics = {
         contactNo: userData.contactNo,
         membership: userData.membership,
         goldSchemeId: userData.goldSchemeId,
+        shopVoucher: userData.shopVoucher,
       },
       "fame_jwtPrivateKey"
       // process.env.JWTPRIVATEKEY

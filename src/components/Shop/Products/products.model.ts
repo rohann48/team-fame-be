@@ -15,6 +15,9 @@ export const ProductSchema: Schema = new Schema(
     price: Number,
     details: String,
     imageInfo: [fileDetails],
+    offers: {
+      cashback: Number,
+    },
     // image: fileDetails,
   },
   {

@@ -27,6 +27,16 @@ const OrderDetailSchema: Schema = new Schema(
     date: {
       type: Date,
     },
+    orderDetails: [
+      {
+        name: String,
+        price: Number,
+        quantity: Number,
+        offers: {
+          cashback: Number,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
@@ -36,6 +46,13 @@ const OrderDetailSchema: Schema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+OrderDetailSchema.virtual("clientInfo", {
+  ref: "Client",
+  localField: "clientId",
+  foreignField: "_id",
+  justOne: true,
+});
 
 OrderDetailSchema.statics = {
   addOrderDetails: async function (data) {
@@ -49,7 +66,10 @@ OrderDetailSchema.statics = {
   },
   getOrderDetailList: async function (matchQuery = {}) {
     try {
-      const res = await this.find(matchQuery);
+      const res = await this.find(matchQuery).populate(
+        "clientInfo",
+        "name contactNo"
+      );
       return res;
     } catch (err) {
       throw err;

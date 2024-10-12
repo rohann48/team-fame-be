@@ -33,6 +33,10 @@ export class ClientService {
         refferalCodes: [referralCode],
       };
       await new OfferService().addOfferRefferalCode(referral);
+      if (!userData["shopVoucher"]) {
+        userData["shopVoucher"] = {};
+      }
+      userData["shopVoucher"]["invitedRefferal"] = userData.invitedRefferal;
       const user = await Client.addClient(userData);
 
       //jwt
@@ -102,7 +106,7 @@ export class ClientService {
     }
     //jwt
     const jwtToken = await Client.generateAuthToken(userInfo);
-    console.log(jwtToken);
+    // console.log(jwtToken);
     //cookie
     const cookieOptions = {
       httpOnly: true,
@@ -122,6 +126,7 @@ export class ClientService {
       emailId: userInfo.emailId,
       membership: userInfo.membership,
       goldSchemeId: userInfo?.["goldSchemeId"],
+      shopVoucher: userInfo.shopVoucher,
     };
     // res.send(token)
   }

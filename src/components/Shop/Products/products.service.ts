@@ -2,6 +2,12 @@ import Product from "./products.model";
 
 export class ProductService {
   async addProduct(newProduct) {
+    if (newProduct.cashback) {
+      if (!newProduct["offers"]) {
+        newProduct["offers"] = {};
+      }
+      newProduct["offers"]["cashback"] = newProduct.cashback;
+    }
     const Data = await Product.addProduct(newProduct);
     return Data;
   }

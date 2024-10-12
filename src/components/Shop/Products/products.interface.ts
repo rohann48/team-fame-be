@@ -13,6 +13,9 @@ interface IProductSchema extends Document {
   details: string;
   price: string;
   imageInfo: Array<fileDetails>;
+  offers: {
+    cashback: number;
+  };
 }
 
 //instance methods, virtuals
@@ -37,4 +40,5 @@ export interface NewProductparams {
   price: IProduct["price"];
   details: IProduct["details"];
   imageInfo?: IProduct["imageInfo"];
+  cashback?: IProduct["offers"]["cashback"];
 }

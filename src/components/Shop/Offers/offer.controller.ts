@@ -56,6 +56,8 @@ export class OfferController extends Controller {
   @Post("/validate/code")
   public async validateRefferalCode(@Body() modifiedData) {
     try {
+      console.log("modifiedData", modifiedData);
+
       const data = await new OfferService().validateRefferalCode(
         modifiedData.refferalCode
       );

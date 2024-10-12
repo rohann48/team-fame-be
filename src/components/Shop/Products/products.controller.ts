@@ -33,8 +33,6 @@ export class ProductController extends Controller {
   @Get("/list")
   public async getProducts() {
     try {
-      console.log("userData");
-
       const data = await new ProductService().getAllProductList();
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
@@ -73,7 +71,7 @@ export class ProductController extends Controller {
               }
             }
             fields["imageInfo"] = uploadedFileInfo;
-            console.log("uploadedFileInfo", fields);
+
             let response = await new ProductService().addProduct(fields);
             resolve(response);
           } catch (err) {
