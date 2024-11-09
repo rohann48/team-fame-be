@@ -19,6 +19,7 @@ export const ProductSchema: Schema = new Schema(
       cashback: Number,
     },
     // image: fileDetails,
+    quantity: Number,
   },
   {
     timestamps: true,
