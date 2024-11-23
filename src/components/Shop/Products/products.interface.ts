@@ -16,6 +16,7 @@ interface IProductSchema extends Document {
   offers: {
     cashback: number;
   };
+  quantity: number;
 }
 
 //instance methods, virtuals
