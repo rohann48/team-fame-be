@@ -83,7 +83,7 @@ ClientSchema.statics = {
         contactNo: userData.contactNo,
         membership: userData.membership,
         goldSchemeId: userData.goldSchemeId,
-        shopVoucher: userData.shopVoucher,
+        // shopVoucher: userData.shopVoucher,
       },
       "fame_jwtPrivateKey"
       // process.env.JWTPRIVATEKEY
@@ -126,7 +126,6 @@ ClientSchema.statics = {
   getOneClientInfo: async function (matchQuery = {}, selectQuery = {}) {
     try {
       const clientDoc = await this.findOne(matchQuery).select(selectQuery);
-
       return clientDoc;
     } catch (err) {
       throw err;

@@ -13,12 +13,22 @@ import { unless } from "./api/middlewares/allowedPaths.middleware";
 import { errorMiddleware } from "./api/middlewares";
 import { Downloadables } from "./components/Downloadables/downloadables.controller";
 import fs from "fs";
+import Razorpay from "razorpay";
+import path from "path";
+const {
+  validateWebhookSignature,
+} = require("razorpay/dist/utils/razorpay-utils");
 
 const hpp = require("hpp");
 const helmet = require("helmet");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const app = express();
+
+const razorpay = new Razorpay({
+  key_id: "rzp_test_r9hvBaKkE60YZL",
+  key_secret: "somHnOxw3Tjfj8RHqFf14Js7",
+});
 
 // Certificate
 const privateKey = fs.readFileSync(
@@ -102,122 +112,101 @@ app.use(
 app.get("/health/check", (req, res, next) => {
   res.status(200).send();
 });
-// import uniqid from "uniqid";
-// import axios from "axios";
-// import sha256 from "sha256";
 
-// app.post(
-//   "/tf/order-details/online/transaction/phonpe",
-//   async function (req, res) {
-//     console.log("hellooo");
-//     const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
-//     const payEndpoint = "/pg/v1/pay";
-//     const MERCHANT_ID = "UATM22YJFZ86K7YG";
-//     const merchantTransactionId = uniqid();
-//     const userId = 123;
-//     const data = {
-//       merchantId: MERCHANT_ID,
-//       merchantTransactionId: merchantTransactionId,
-//       merchantUserId: userId,
-//       amount: 100 * 100, //in paisa
-//       redirectUrl: `http://localhost:9001/payment/validate/${merchantTransactionId}`,
-//       redirectMode: "POST",
-//       callbackUrl: `http://localhost:9001/payment/validate/${merchantTransactionId}`,
-//       mobileNumber: "9876543212",
-//       paymentInstrument: {
-//         type: "PAY_PAGE",
-//       },
-//     };
+// Function to read data from JSON file
+const readData = () => {
+  // if (fs.existsSync("orders.json")) {
+  //   const data = fs.readFileSync("orders.json");
+  //   const jsonString = data.toString("utf-8");
+  //   const jsonObject = JSON.parse(jsonString);
+  //   return jsonObject;
+  // }
+  return [];
+};
 
-//     const SALT_INDEX = 1;
-//     const SALT_KEY = "9793d0d2-bd88-41a5-8264-eefd356cc504";
-//     const bufferObj = Buffer.from(JSON.stringify(data), "utf8");
-//     const base64EncodedPayload = bufferObj.toString("base64");
-//     let string = base64EncodedPayload + payEndpoint + SALT_KEY;
-//     const concatedString = sha256(string);
-//     const xVerify = concatedString + "###" + SALT_INDEX;
+// Function to write data to JSON file
+const writeData = (data) => {
+  fs.writeFileSync("orders.json", JSON.stringify(data, null, 2));
+};
 
-//     console.log("xVerify", xVerify);
+// Initialize orders.json if it doesn't exist
+if (!fs.existsSync("orders.json")) {
+  writeData([]);
+}
 
-//     const options = {
-//       method: "post",
-//       url: `${PHONE_PE_HOST_URL}${payEndpoint}`,
-//       headers: {
-//         accept: "application/json",
-//         "Content-Type": "application/json",
-//         "X-VERIFY": xVerify,
-//       },
-//       data: {
-//         request: base64EncodedPayload,
-//       },
-//     };
+// Route to handle order creation
+app.post("/create-order", async (req, res) => {
+  try {
+    const { amount, currency, receipt, notes } = req.body;
+    const options = {
+      amount: amount * 100, // Convert amount to paise
+      currency,
+      receipt,
+      notes,
+    };
 
-//     axios
-//       .request(options)
-//       .then(function (response) {
-//         console.log("response", response.data);
-//         // return response.data;
-//       })
-//       .catch(function (error) {
-//         if (error.response) {
-//           console.log("Error data:", error.response.data);
-//           console.log("Error status:", error.response.status);
-//           console.log("Error headers:", error.response.headers);
-//         } else {
-//           console.error("Error message:", error.message);
-//         }
-//       });
-//   }
-// );
+    const order = await razorpay.orders.create(options);
 
-// app.post("/payment/validate/:merchantTransactionId", async function (req, res) {
-//   // const { merchantTransactionId } = req.params;
+    // Read current orders, add new order, and write back to the file
+    const orders = readData();
+    orders.push({
+      order_id: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      receipt: order.receipt,
+      status: "created",
+    });
+    writeData(orders);
 
-//   const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
-//   const payEndpoint = "/pg/v1/pay";
-//   const MERCHANT_ID = "UATM22YJFZ86K7YG";
-//   const merchantTransactionId = uniqid();
-//   const userId = 123;
+    res.json(order); // Send order details to frontend, including order ID
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error creating order");
+  }
+});
 
-//   const SALT_INDEX = 1;
-//   const SALT_KEY = "9793d0d2-bd88-41a5-8264-eefd356cc504";
-//   if (merchantTransactionId) {
-//     let statusUrl =
-//       `${PHONE_PE_HOST_URL}/pg/v1/status/${MERCHANT_ID}/` +
-//       merchantTransactionId;
+// Route to serve the success page
+app.get("/payment-success", (req, res) => {
+  res.sendFile(path.join(__dirname, "success.html"));
+});
 
-//     let string =
-//       `/pg/v1/status/${MERCHANT_ID}/` + merchantTransactionId + SALT_KEY;
-//     let sha256_val = sha256(string);
-//     let xVerifyChecksum = sha256_val + "###" + SALT_INDEX;
+// Route to handle payment verification
+app.post("/verify-payment", (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
 
-//     axios
-//       .get(statusUrl, {
-//         headers: {
-//           "Content-Type": "application/json",
-//           "X-VERIFY": xVerifyChecksum,
-//           "X-MERCHANT-ID": merchantTransactionId,
-//           accept: "application/json",
-//         },
-//       })
-//       .then(function (response) {
-//         console.log("response->", response.data);
-//         if (response.data && response.data.code === "PAYMENT_SUCCESS") {
-//           // redirect to FE payment success status page
-//           res.send(response.data);
-//         } else {
-//           // redirect to FE payment failure / pending status page
-//           res.send(response.data);
-//         }
-//       })
-//       .catch(function (error) {
-//         // redirect to FE payment failure / pending status page
-//         res.send(error);
-//       });
-//   } else {
-//     res.send("Sorry!! Error");
-//   }
-// });
+  const secret = razorpay;
+  const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+  try {
+    const isValidSignature = validateWebhookSignature(
+      body,
+      razorpay_signature,
+      secret
+    );
+    if (isValidSignature) {
+      // Update the order with payment details
+      const orders = readData();
+      const order = orders.find((o) => o.order_id === razorpay_order_id);
+      if (order) {
+        order.status = "paid";
+        order.payment_id = razorpay_payment_id;
+        writeData(orders);
+      }
+      res.status(200).json({ status: "ok" });
+      console.log("Payment verification successful");
+    } else {
+      res.status(400).json({ status: "verification_failed" });
+      console.log("Payment verification failed");
+    }
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ status: "error", message: "Error verifying payment" });
+  }
+});
+
 const allowedPaths = [
   // {
   //   methods: ["POST"],

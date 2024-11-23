@@ -36,7 +36,9 @@ export class ClientService {
       if (!userData["shopVoucher"]) {
         userData["shopVoucher"] = {};
       }
-      userData["shopVoucher"]["invitedRefferal"] = userData.invitedRefferal;
+      userData["shopVoucher"] = {
+        invitedRefferal: userData.invitedRefferal,
+      };
       const user = await Client.addClient(userData);
 
       //jwt
@@ -61,8 +63,13 @@ export class ClientService {
   }
 
   async getOneClientInfo(matchQuery, selectQuery) {
-    const data = await Client.getOneClientInfo(matchQuery, selectQuery);
-    return data;
+    try {
+      const data = await Client.getOneClientInfo(matchQuery, selectQuery);
+      return data.toObject();
+      // clientInfo: data.clientInfo.toObject(),
+    } catch (error) {
+      console.log("err", error);
+    }
   }
 
   async getClientsByQuery(matchQuery = {}) {
@@ -96,37 +103,37 @@ export class ClientService {
 
     const selectQuery = { confirmPassword: 0, referralCode: 0 };
     const userInfo = await this.getOneClientInfo(matchQuery, selectQuery);
-
-    if (!userInfo) {
+    let userObj = { ...userInfo };
+    if (!userObj) {
       throw new Error("Invalid contactNo or password");
     }
-    const match = await bcrypt.compare(userData.password, userInfo.password);
+    const match = await bcrypt.compare(userData.password, userObj.password);
     if (!match) {
       throw new Error("Invalid contactNo or password");
     }
     //jwt
-    const jwtToken = await Client.generateAuthToken(userInfo);
+    const jwtToken = await Client.generateAuthToken(userObj);
     // console.log(jwtToken);
     //cookie
     const cookieOptions = {
       httpOnly: true,
       expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), //+days*24hr*60min*60sec*1000ms
     };
-    if (!userInfo?.["goldSchemeId"]) {
-      userInfo["goldSchemeId"] = null;
+    if (!userObj?.["goldSchemeId"]) {
+      userObj["goldSchemeId"] = null;
     }
-    req["session"].userInfo = userInfo.toObject();
+    req["session"].userInfo = userObj;
     req.res.cookie("authToken", jwtToken, cookieOptions);
     return {
-      _id: userInfo._id,
-      name: userInfo.name,
-      lastName: userInfo.lastName,
-      role: userInfo.role,
-      contactNo: userInfo.contactNo,
-      emailId: userInfo.emailId,
-      membership: userInfo.membership,
-      goldSchemeId: userInfo?.["goldSchemeId"],
-      shopVoucher: userInfo.shopVoucher,
+      _id: userObj._id,
+      name: userObj.name,
+      lastName: userObj.lastName,
+      role: userObj.role,
+      contactNo: userObj.contactNo,
+      emailId: userObj.emailId,
+      membership: userObj.membership,
+      goldSchemeId: userObj?.["goldSchemeId"],
+      shopVoucher: userObj.shopVoucher,
     };
     // res.send(token)
   }
