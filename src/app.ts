@@ -24,6 +24,7 @@ const helmet = require("helmet");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const app = express();
+const greenlock = require("./greenlock"); // Import Greenlock configuration
 
 const razorpay = new Razorpay({
   key_id: "rzp_test_r9hvBaKkE60YZL",
@@ -31,24 +32,24 @@ const razorpay = new Razorpay({
 });
 
 // Certificate
-const privateKey = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/privkey.pem",
-  "utf8"
-);
-const certificate = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/cert.pem",
-  "utf8"
-);
-const ca = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/chain.pem",
-  "utf8"
-);
+// const privateKey = fs.readFileSync(
+//   "/etc/letsencrypt/live/api.team-fame.com/privkey.pem",
+//   "utf8"
+// );
+// const certificate = fs.readFileSync(
+//   "/etc/letsencrypt/live/api.team-fame.com/cert.pem",
+//   "utf8"
+// );
+// const ca = fs.readFileSync(
+//   "/etc/letsencrypt/live/api.team-fame.com/chain.pem",
+//   "utf8"
+// );
 
-const credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: ca,
-};
+// const credentials = {
+//   key: privateKey,
+//   cert: certificate,
+//   ca: ca,
+// };
 
 app.use(helmet());
 app.use((req, res, next) => {
@@ -94,12 +95,13 @@ mongoose.connection.on("error", (err: any) => {
 });
 const port = process.env.PORT || 3002;
 let server;
-let httpsServer;
-if (process.env.NODE_ENV === "development") {
-  server = new http.Server(app);
-} else {
-  httpsServer = new https.Server(credentials, app);
-}
+// let httpsServer;
+// if (process.env.NODE_ENV === "development") {
+//   server = new http.Server(app);
+// }
+// else {
+//   httpsServer = new https.Server(credentials, app);
+// }
 app.use(
   "/tf/docs",
   swaggerUi.serve,
@@ -148,7 +150,7 @@ app.post("/create-order", async (req, res) => {
     const order = await razorpay.orders.create(options);
 
     // Read current orders, add new order, and write back to the file
-    const orders = readData();
+    const orders = [];
     orders.push({
       order_id: order.id,
       amount: order.amount,
@@ -156,7 +158,7 @@ app.post("/create-order", async (req, res) => {
       receipt: order.receipt,
       status: "created",
     });
-    writeData(orders);
+    // writeData(orders);
 
     res.json(order); // Send order details to frontend, including order ID
   } catch (error) {
@@ -217,16 +219,21 @@ app.use(unless(decryptRequestMiddleware, allowedPaths));
 RegisterRoutes(app);
 new Downloadables(app);
 app.use(errorMiddleware);
-if (process.env.NODE_ENV === "development") {
-  server.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-} else {
-  httpsServer.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
-}
+// if (process.env.NODE_ENV === "development") {
+//   server.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+//   });
+// }
+// else {
+//   httpsServer.listen(port, () => {
+//     console.log(`Server running on port ${port}`);
+//   });
+// }
 
+// greenlock.listen(443, () => {
+//   console.log("Greenlock HTTPS server running on port");
+// });
+greenlock.serve(app);
 /** to catch any unhandled promise rejection */
 process.on("unhandledRejection", function (err, promise) {
   console.error(
@@ -242,7 +249,8 @@ process.on("uncaughtException", function (err, origin) {
 });
 
 process.on("SIGINT", function () {
-  server.close();
+  // server.close();
+  greenlock.close();
   // calling .shutdown allows your process to exit normally
   process.exit();
 });
