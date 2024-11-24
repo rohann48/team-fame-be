@@ -14,7 +14,7 @@ const greenlock = Greenlock.init({
   configDir: configDir, // Directory to store configurations
   maintainerEmail: "rohann48@gmail.com", // Your email for notifications
   cluster: false,
-  staging: true, // Set to 'false' for production
+  staging: false, // Set to 'false' for production
   store: require("greenlock-store-fs").create({
     configDir: configDir, // Use the same configDir path for storage
     webrootPath: "/tmp/acme-challenges", // Directory to store challenge files
