@@ -33,15 +33,15 @@ const razorpay = new Razorpay({
 
 // Certificate
 const privateKey = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/privkey.pem",
+  "/etc/letsencrypt/live/team-fame.com/privkey.pem",
   "utf8"
 );
 const certificate = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/cert.pem",
+  "/etc/letsencrypt/live/team-fame.com/cert.pem",
   "utf8"
 );
 const ca = fs.readFileSync(
-  "/etc/letsencrypt/live/api.team-fame.com/chain.pem",
+  "/etc/letsencrypt/live/team-fame.com/chain.pem",
   "utf8"
 );
 
