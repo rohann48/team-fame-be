@@ -24,7 +24,6 @@ const helmet = require("helmet");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const app = express();
-const greenlock = require("./greenlock"); // Import Greenlock configuration
 
 const razorpay = new Razorpay({
   key_id: "rzp_test_r9hvBaKkE60YZL",
