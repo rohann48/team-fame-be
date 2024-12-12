@@ -25,9 +25,14 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const app = express();
 
+// const razorpay = new Razorpay({
+//   key_id: "rzp_test_r9hvBaKkE60YZL",
+//   key_secret: "somHnOxw3Tjfj8RHqFf14Js7",
+// });
+
 const razorpay = new Razorpay({
-  key_id: "rzp_test_r9hvBaKkE60YZL",
-  key_secret: "somHnOxw3Tjfj8RHqFf14Js7",
+  key_id: "rzp_test_8UqYGrFyKHxYJz",
+  key_secret: "WUbKN0DYOagsKkIHchm3HRvM",
 });
 
 // Certificate
