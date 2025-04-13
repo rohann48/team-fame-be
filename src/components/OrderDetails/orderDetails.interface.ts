@@ -4,16 +4,22 @@ import { IClient } from "../Clients/client.interface";
 interface IOrderDetailSchema extends Document {
   _id: any;
   clientId: IClient["_id"];
-  name: string;
-  mobile: number;
   address: {
+    name: string;
+    mobile: number;
     addressLine1: string;
     addressLine2?: string;
     addressLine3?: string;
+    pincode: number;
   };
-  pincode: number;
   amount: number;
   paymentMode: string;
+  date: Date;
+  razorOrderId: string;
+  paymentId: string;
+  paymentStatus: string;
+  status: string;
+  statusDescription: string;
   orderDetails: Array<{
     name: string;
     price: number;
@@ -38,18 +44,29 @@ export interface IOrderDetailModel extends Model<IOrderDetail> {
   getOrderDetailList(matchQuery: object): Promise<Array<IOrderDetail>>;
   getOrderDetailById(id: IOrderDetail["_id"]): Promise<IOrderDetail>;
   getOrderDetailsByQuery(matchQuery: object);
+  getOrderDetailsByQueryAndPopulate(matchQuery: object): Promise<IOrderDetail>;
+  updateOrderStatusById(
+    id: IOrderDetail["_id"],
+    modefiedData
+  ): Promise<IOrderDetail>;
 }
 
 export interface NewOrderDetailParams {
   clientId: IClient["_id"];
-  name: IOrderDetail["name"];
-  mobile: IOrderDetail["mobile"];
-  pincode: IOrderDetail["pincode"];
+  name: IOrderDetail["address"]["name"];
+  mobile: IOrderDetail["address"]["mobile"];
+  pincode: IOrderDetail["address"]["pincode"];
   addressLine1: IOrderDetail["address"]["addressLine1"];
   addressLine2?: IOrderDetail["address"]["addressLine2"];
   addressLine3?: IOrderDetail["address"]["addressLine3"];
   amount: IOrderDetail["amount"];
+  date: IOrderDetail["date"];
   paymentMode: IOrderDetail["paymentMode"];
   code?: string;
   orderDetails: IOrderDetail["orderDetails"];
+  razorOrderId: IOrderDetail["razorOrderId"];
+  paymentStatus?: IOrderDetail["paymentStatus"];
+  paymentId?: IOrderDetail["paymentId"];
+  status?: IOrderDetail["status"];
+  statusDescription?: IOrderDetail["statusDescription"];
 }

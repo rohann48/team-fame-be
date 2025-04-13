@@ -71,4 +71,24 @@ export class OrderDetailsController extends Controller {
       throw new HttpException(400, error);
     }
   }
+
+  @SuccessResponse(201, HttpResponseMessage.CREATED)
+  // @Security("authenticate")
+  @Put("/update/status")
+  public async updateOrderStatus(
+    @Request() req: express.Request,
+    @Query() orderId,
+    @Query() status: string
+  ) {
+    try {
+      const doc = await new OrderDetailsService().updateOrderStatusById(
+        orderId,
+        status
+      );
+      return new HttpSuccess(HttpResponseMessage.CREATED, doc);
+    } catch (error) {
+      let err: any = error;
+      throw new HttpException(400, err, err?.message);
+    }
+  }
 }

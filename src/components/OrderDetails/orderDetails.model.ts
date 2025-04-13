@@ -14,19 +14,24 @@ const OrderDetailSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Client",
     },
-    name: String,
-    mobile: Number,
     address: {
+      name: String,
+      mobile: Number,
       addressLine1: String,
       addressLine2: String,
       addressLine3: String,
+      pincode: Number,
     },
-    pincode: Number,
     amount: Number,
     paymentMode: String,
     date: {
       type: Date,
     },
+    razorOrderId: String,
+    paymentId: String,
+    paymentStatus: String,
+    status: String,
+    statusDescription: String,
     orderDetails: [
       {
         name: String,
@@ -88,6 +93,29 @@ OrderDetailSchema.statics = {
   getOrderDetailsByQuery: async function (matchQuery) {
     try {
       const res = await this.findOne(matchQuery);
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  getOrderDetailsByQueryAndPopulate: async function (matchQuery) {
+    try {
+      const res = await this.findOne(matchQuery).populate(
+        "clientInfo",
+        "name lastName emailId"
+      );
+      return res;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateOrderStatusById: async function (orderId, modefiedData) {
+    try {
+      const res = await this.findByIdAndUpdate(orderId, modefiedData, {
+        new: true,
+      });
       return res;
     } catch (err) {
       throw err;

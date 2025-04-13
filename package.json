@@ -42,6 +42,7 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.7.2",
+    "nodemailer": "^6.9.16",
     "razorpay": "^2.9.5",
     "sha256": "^0.2.0",
     "swagger-ui-express": "^4.6.0",
