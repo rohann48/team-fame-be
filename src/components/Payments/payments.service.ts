@@ -42,8 +42,6 @@ export class PaymentDetailsService {
     }
   }
   async verifyPayment(data) {
-    console.log("data", data);
-
     const {
       razorpay_order_id,
       razorpay_payment_id,
@@ -77,7 +75,11 @@ export class PaymentDetailsService {
         const emailData = {
           to: [orderInfo?.["clientInfo"]?.emailId],
           subject: "Payment Success",
-          message: `You've successfully placed the order. Your payment of ${amount} was successful. Order ID: ${razorpay_order_id} and Payment ID: ${razorpay_payment_id}`,
+          message: `You've successfully placed the order. Your payment of ₹${(
+            amount / 100
+          ).toFixed(
+            2
+          )} was successful. Order ID: ${razorpay_order_id} and Payment ID: ${razorpay_payment_id}`,
         };
 
         console.log("Payment verification successful");
