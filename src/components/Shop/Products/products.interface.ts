@@ -33,6 +33,7 @@ export interface IProductModel extends Model<IProduct> {
   getProductList(matchQuery: object): Promise<Array<IProduct>>;
   getProductById(id: IProduct["_id"]): Promise<IProduct>;
   deleteProductById(id: IProduct["_id"]): Promise<IProduct>;
+  updateProductById(id: string, data: object): Promise<IProduct>;
 }
 
 export interface NewProductparams {

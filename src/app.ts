@@ -36,27 +36,27 @@ const app = express();
 // });
 
 let credentials = {};
-if (process.env.NODE_ENV !== "development") {
-  // Certificate
-  const privateKey = fs.readFileSync(
-    "/etc/letsencrypt/live/team-fame.com/privkey.pem",
-    "utf8"
-  );
-  const certificate = fs.readFileSync(
-    "/etc/letsencrypt/live/team-fame.com/cert.pem",
-    "utf8"
-  );
-  const ca = fs.readFileSync(
-    "/etc/letsencrypt/live/team-fame.com/chain.pem",
-    "utf8"
-  );
+// if (process.env.NODE_ENV !== "development") {
+//   // Certificate
+//   const privateKey = fs.readFileSync(
+//     "/etc/letsencrypt/live/team-fame.com/privkey.pem",
+//     "utf8"
+//   );
+//   const certificate = fs.readFileSync(
+//     "/etc/letsencrypt/live/team-fame.com/cert.pem",
+//     "utf8"
+//   );
+//   const ca = fs.readFileSync(
+//     "/etc/letsencrypt/live/team-fame.com/chain.pem",
+//     "utf8"
+//   );
 
-  credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca,
-  };
-}
+//   credentials = {
+//     key: privateKey,
+//     cert: certificate,
+//     ca: ca,
+//   };
+// }
 
 app.use(helmet());
 app.use((req, res, next) => {
@@ -106,7 +106,7 @@ let httpsServer;
 if (process.env.NODE_ENV === "development") {
   server = new http.Server(app);
 } else {
-  httpsServer = new https.Server(credentials, app);
+  // httpsServer = new https.Server(credentials, app);
 }
 app.use(
   "/tf/docs",

@@ -66,6 +66,16 @@ ProductSchema.statics = {
       throw err;
     }
   },
+  updateProductById: async function (ProductId, data) {
+    try {
+      const product = await this.findByIdAndUpdate(ProductId, data, {
+        new: true,
+      });
+      return product;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
 
 const Product: IProductModel = model<IProduct, IProductModel>(

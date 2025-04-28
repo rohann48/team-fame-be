@@ -85,4 +85,8 @@ export class ProductService {
     const data = await Product.deleteProductById(docId);
     return data;
   }
+  async updateProductById(productId, modifiedData) {
+    const data = await Product.updateProductById(productId, modifiedData);
+    return data;
+  }
 }
