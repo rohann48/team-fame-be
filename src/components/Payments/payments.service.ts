@@ -47,11 +47,15 @@ export class PaymentDetailsService {
       razorpay_payment_id,
       razorpay_signature,
       amount,
+      orderType,
     } = data;
 
     const secret = "WUbKN0DYOagsKkIHchm3HRvM";
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
+    if (orderType !== "shop") {
+      return true;
+    }
     try {
       const isValidSignature = validateWebhookSignature(
         body,
