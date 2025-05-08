@@ -17,6 +17,7 @@ import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
 import { HttpException, HttpSuccess } from "../../common/helpers/HttpResponse";
 import {
+  IManualSchemData,
   NewGoldSchemeParams,
   UpdateGoldInvestmentParams,
   UpdateGoldSchemeParams,
@@ -117,6 +118,23 @@ export class GoldSchemeController extends Controller {
     } catch (error) {
       console.log(error);
       throw new HttpException(400, error);
+    }
+  }
+  @SuccessResponse(201, HttpResponseMessage.CREATED)
+  // @Security("authenticate")
+  @Post("/add-scheme-manually")
+  public async addGoldSchemeManually(
+    @Request() req: express.Request,
+    @Body() newData: IManualSchemData
+  ) {
+    try {
+      const doc = await new GoldSchemeService().addGoldSchemeManually(newData);
+      return new HttpSuccess(HttpResponseMessage.CREATED, doc);
+    } catch (error) {
+      let err: any = error;
+      //   if (err.code === 11000) {
+      //     return err;
+      //   } else throw new HttpException(400, err, err?.message);
     }
   }
 }

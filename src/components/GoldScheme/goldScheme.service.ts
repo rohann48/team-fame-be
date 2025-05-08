@@ -48,4 +48,49 @@ export class GoldSchemeService {
     );
     return res;
   }
+  async addGoldSchemeManually(newScheme) {
+    const macthQuery = {
+      contactNo: Number(newScheme.mobileNumber),
+    };
+    const selectQuery = {
+      goldSchemeId: 1,
+    };
+    const getClientInfo = await new ClientService().getOneClientInfo(
+      macthQuery,
+      selectQuery
+    );
+
+    // Format the investment based on schema
+    const currentDate = new Date();
+    const investment = {
+      date: new Date(newScheme.startDate),
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth() + 1, // Months are zero-based in JavaScript
+      amount: Number(newScheme.investmentAmount),
+    };
+
+    if (!getClientInfo.goldSchemeId) {
+      const schemeData = {
+        clientId: getClientInfo._id,
+        period: Number(newScheme.period),
+        startDate: new Date(newScheme.startDate),
+        endDate: new Date(newScheme.endDate),
+        investments: [investment],
+      };
+      const data = await GoldScheme.addGoldScheme(schemeData);
+      // Update client with the new gold scheme ID
+      await new ClientService().updateClientInfoById(getClientInfo._id, {
+        goldSchemeId: data._id,
+      });
+      return data;
+    } else {
+      // Client already has a gold scheme, add new investment to existing scheme
+      const updatedScheme = await GoldScheme.findByIdAndUpdate(
+        getClientInfo.goldSchemeId,
+        { $push: { investments: investment } },
+        { new: true }
+      );
+      return updatedScheme;
+    }
+  }
 }

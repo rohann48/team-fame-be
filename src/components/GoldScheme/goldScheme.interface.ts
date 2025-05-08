@@ -60,3 +60,10 @@ export interface UpdateGoldInvestmentParams {
   date: Date;
   amount: number;
 }
+export interface IManualSchemData {
+  mobileNumber: string;
+  investmentAmount: string;
+  startDate: string;
+  endDate: string;
+  period: string;
+}
