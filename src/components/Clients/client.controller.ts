@@ -155,10 +155,29 @@ export class ClientController extends Controller {
     @Request() req: express.Request,
     @Query() clientId: string
   ) {
-    try {
+    try {      
       const userInfo = req.session["userInfo"];
       console.log(userInfo);
       const data = await new ClientService().getClientInfoById(clientId);
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(400, error);
+    }
+  }
+
+  @SuccessResponse(201, HttpResponseMessage.CREATED)
+  @Get("/membership")
+  public async getClientMembership(
+    @Request() req: express.Request,
+    @Query() clientId: string
+  ) {
+    try {    
+      const matchQuery={
+        _id: clientId
+      }  
+      const selectQuery= { membership: 1 }
+      const data = await new ClientService().getOneClientInfo(matchQuery,selectQuery);
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       console.log(error);

@@ -7,7 +7,7 @@ export function expressAuthentication(
   securityName: string,
   scopes?: string[]
 ) {
-  console.log("hy", securityName);
+  // console.log("hy", securityName);
 
   // if (!token) {
   //   return req.res.status(401).send("Access Denied: No Token Provided");

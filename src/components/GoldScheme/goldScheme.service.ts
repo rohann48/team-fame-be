@@ -61,11 +61,13 @@ export class GoldSchemeService {
     );
 
     // Format the investment based on schema
-    const currentDate = new Date();
+    const date = new Date(newScheme.startDate);
+    const month = date.getMonth() + 1; // Months are zero-based in JavaScript
+    const year = date.getFullYear();
     const investment = {
       date: new Date(newScheme.startDate),
-      year: currentDate.getFullYear(),
-      month: currentDate.getMonth() + 1, // Months are zero-based in JavaScript
+      year: year,
+      month: month,
       amount: Number(newScheme.investmentAmount),
     };
 
