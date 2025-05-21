@@ -21,7 +21,6 @@ export class GoldSchemeService {
   }
 
   async getGoldSchemeByQuery(clientId) {
-    console.log(clientId, "cc");
     const matchQuery = {
       clientId: new Types.ObjectId(clientId),
     };
@@ -41,6 +40,7 @@ export class GoldSchemeService {
       month: data.month,
       date: new Date(),
       amount: data.amount,
+      type: "NonRefundable",
     };
     const res = await GoldScheme.updateSchemeInvestmentById(
       aboutId,
@@ -48,6 +48,54 @@ export class GoldSchemeService {
     );
     return res;
   }
+  // async addGoldSchemeManually(newScheme) {
+  //   const macthQuery = {
+  //     contactNo: Number(newScheme.mobileNumber),
+  //   };
+  //   const selectQuery = {
+  //     goldSchemeId: 1,
+  //   };
+  //   const getClientInfo = await new ClientService().getOneClientInfo(
+  //     macthQuery,
+  //     selectQuery
+  //   );
+
+  //   // Format the investment based on schema
+  //   const date = new Date(newScheme.startDate);
+  //   const month = date.getMonth() + 1; // Months are zero-based in JavaScript
+  //   const year = date.getFullYear();
+  //   const investment = {
+  //     date: new Date(newScheme.startDate),
+  //     year: year,
+  //     month: month,
+  //     amount: Number(newScheme.investmentAmount),
+  //     type: newScheme.schemeType,
+  //   };
+
+  //   if (!getClientInfo.goldSchemeId) {
+  //     const schemeData = {
+  //       clientId: getClientInfo._id,
+  //       period: Number(newScheme.period),
+  //       startDate: new Date(newScheme.startDate),
+  //       endDate: new Date(newScheme.endDate),
+  //       investments: [investment],
+  //     };
+  //     const data = await GoldScheme.addGoldScheme(schemeData);
+  //     // Update client with the new gold scheme ID
+  //     await new ClientService().updateClientInfoById(getClientInfo._id, {
+  //       goldSchemeId: data._id,
+  //     });
+  //     return data;
+  //   } else {
+  //     // Client already has a gold scheme, add new investment to existing scheme
+  //     const updatedScheme = await GoldScheme.findByIdAndUpdate(
+  //       getClientInfo.goldSchemeId,
+  //       { $push: { investments: investment } },
+  //       { new: true }
+  //     );
+  //     return updatedScheme;
+  //   }
+  // }
   async addGoldSchemeManually(newScheme) {
     const macthQuery = {
       contactNo: Number(newScheme.mobileNumber),
@@ -60,33 +108,39 @@ export class GoldSchemeService {
       selectQuery
     );
 
-    // Format the investment based on schema
     const date = new Date(newScheme.startDate);
-    const month = date.getMonth() + 1; // Months are zero-based in JavaScript
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
+
     const investment = {
-      date: new Date(newScheme.startDate),
-      year: year,
-      month: month,
+      date,
+      year,
+      month,
       amount: Number(newScheme.investmentAmount),
+      type: newScheme.schemeType,
     };
 
     if (!getClientInfo.goldSchemeId) {
-      const schemeData = {
+      const schemeData: any = {
         clientId: getClientInfo._id,
-        period: Number(newScheme.period),
         startDate: new Date(newScheme.startDate),
-        endDate: new Date(newScheme.endDate),
         investments: [investment],
       };
+
+      // Only include period & endDate for NonRefundable schemes
+      if (newScheme.schemeType === "NonRefundable") {
+        schemeData.period = Number(newScheme.period);
+        schemeData.endDate = new Date(newScheme.endDate);
+      }
+
       const data = await GoldScheme.addGoldScheme(schemeData);
-      // Update client with the new gold scheme ID
+
       await new ClientService().updateClientInfoById(getClientInfo._id, {
         goldSchemeId: data._id,
       });
+
       return data;
     } else {
-      // Client already has a gold scheme, add new investment to existing scheme
       const updatedScheme = await GoldScheme.findByIdAndUpdate(
         getClientInfo.goldSchemeId,
         { $push: { investments: investment } },

@@ -10,6 +10,11 @@ const investmentSchema = {
   month: Number,
   date: Date,
   amount: Number,
+  type: {
+    type: String,
+    enum: ["FD", "NonRefundable"],
+    required: true,
+  },
 };
 
 const GoldSchemeSchema: Schema = new Schema(
@@ -18,13 +23,18 @@ const GoldSchemeSchema: Schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Client",
     },
-    period: Number,
     startDate: {
       type: Date,
     },
+    period: {
+      type: Number,
+      default: null,
+    },
     endDate: {
       type: Date,
+      default: null,
     },
+
     investments: [investmentSchema],
   },
   {

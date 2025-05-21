@@ -6,6 +6,7 @@ interface investmentSchema {
   month: number;
   date: Date;
   amount: number;
+  type: "FD" | "NonRefundable";
 }
 
 interface IGoldSchemeSchema extends Document {
@@ -64,6 +65,7 @@ export interface IManualSchemData {
   mobileNumber: string;
   investmentAmount: string;
   startDate: string;
-  endDate: string;
-  period: string;
+  endDate?: string;
+  period?: string;
+  schemeType: string;
 }
