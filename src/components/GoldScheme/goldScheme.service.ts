@@ -97,14 +97,14 @@ export class GoldSchemeService {
   //   }
   // }
   async addGoldSchemeManually(newScheme) {
-    const macthQuery = {
+    const matchQuery = {
       contactNo: Number(newScheme.mobileNumber),
     };
     const selectQuery = {
       goldSchemeId: 1,
     };
     const getClientInfo = await new ClientService().getOneClientInfo(
-      macthQuery,
+      matchQuery,
       selectQuery
     );
 
@@ -119,6 +119,8 @@ export class GoldSchemeService {
       amount: Number(newScheme.investmentAmount),
       type: newScheme.schemeType,
     };
+
+    let result;
 
     if (!getClientInfo.goldSchemeId) {
       const schemeData: any = {
@@ -139,14 +141,21 @@ export class GoldSchemeService {
         goldSchemeId: data._id,
       });
 
-      return data;
+      // Populate the client data before returning
+      result = await GoldScheme.findById(data._id).populate(
+        "clientId",
+        "name contactNo"
+      );
     } else {
       const updatedScheme = await GoldScheme.findByIdAndUpdate(
         getClientInfo.goldSchemeId,
         { $push: { investments: investment } },
         { new: true }
-      );
-      return updatedScheme;
+      ).populate("clientId", "name contactNo");
+
+      result = updatedScheme;
     }
+
+    return result;
   }
 }
