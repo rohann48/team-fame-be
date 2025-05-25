@@ -29,7 +29,7 @@ export interface IClientPopulated extends IClient {}
 
 export interface IClientModel extends Model<IClient> {
   addClient(userData);
-  getClientsByQuery(matchQuery);
+  getClientsByQuery(matchQuery, selectQuery);
   getClientInfoById(clientId: IClient["_id"]): Promise<IClient>;
   updateClientInfoById(clientId: IClient["_id"], data);
   generateAuthToken(userData);

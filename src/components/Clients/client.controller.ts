@@ -22,7 +22,7 @@ import { ClientService } from "./client.service";
 @Route("tf/client")
 export class ClientController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  @Security("authenticate")
+  // @Security("authenticate")
   @Get()
   public async getClientsByQuery() {
     try {
@@ -155,7 +155,7 @@ export class ClientController extends Controller {
     @Request() req: express.Request,
     @Query() clientId: string
   ) {
-    try {      
+    try {
       const userInfo = req.session["userInfo"];
       console.log(userInfo);
       const data = await new ClientService().getClientInfoById(clientId);
@@ -172,12 +172,15 @@ export class ClientController extends Controller {
     @Request() req: express.Request,
     @Query() clientId: string
   ) {
-    try {    
-      const matchQuery={
-        _id: clientId
-      }  
-      const selectQuery= { membership: 1 }
-      const data = await new ClientService().getOneClientInfo(matchQuery,selectQuery);
+    try {
+      const matchQuery = {
+        _id: clientId,
+      };
+      const selectQuery = { membership: 1 };
+      const data = await new ClientService().getOneClientInfo(
+        matchQuery,
+        selectQuery
+      );
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       console.log(error);

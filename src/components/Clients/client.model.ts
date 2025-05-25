@@ -91,11 +91,10 @@ ClientSchema.statics = {
     );
     return jwtToken;
   },
-  getClientsByQuery: async function (matchQuery) {
+  getClientsByQuery: async function (matchQuery, selectQuery) {
     try {
-      const assignedClients = await this.find(matchQuery);
-      // .populate("industryInfo", "name")
-      // .populate("subIndustryInfo", "name code");
+      const assignedClients = await this.find(matchQuery).select(selectQuery);
+
       return assignedClients;
     } catch (err) {
       throw err;

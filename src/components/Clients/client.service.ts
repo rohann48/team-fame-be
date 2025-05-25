@@ -73,7 +73,16 @@ export class ClientService {
   }
 
   async getClientsByQuery(matchQuery = {}) {
-    const data = await Client.getClientsByQuery(matchQuery);
+    const selectQuery = {
+      name: 1,
+      lastName: 1,
+      contactNo: 1,
+      emailId: 1,
+      role: 1,
+      membership: 1,
+      goldSchemeId: 1,
+    };
+    const data = await Client.getClientsByQuery(matchQuery, selectQuery);
     return data;
   }
 

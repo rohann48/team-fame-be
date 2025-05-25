@@ -102,12 +102,16 @@ export class GoldSchemeService {
     };
     const selectQuery = {
       goldSchemeId: 1,
+      membership: 1,
     };
     const getClientInfo = await new ClientService().getOneClientInfo(
       matchQuery,
       selectQuery
     );
 
+    if (!getClientInfo) {
+      throw new Error("Client not found with the provided mobile number.");
+    }
     const date = new Date(newScheme.startDate);
     const month = date.getMonth() + 1;
     const year = date.getFullYear();

@@ -130,11 +130,8 @@ export class GoldSchemeController extends Controller {
     try {
       const doc = await new GoldSchemeService().addGoldSchemeManually(newData);
       return new HttpSuccess(HttpResponseMessage.CREATED, doc);
-    } catch (error) {
-      let err: any = error;
-      //   if (err.code === 11000) {
-      //     return err;
-      //   } else throw new HttpException(400, err, err?.message);
+    } catch (error: any) {
+      throw new HttpException(400, error, error?.message);
     }
   }
 }
