@@ -62,6 +62,10 @@ export const ClientSchema: Schema = new Schema(
     shopVoucher: {
       invitedRefferal: String,
     },
+    isSuperAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

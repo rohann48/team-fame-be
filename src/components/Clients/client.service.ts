@@ -81,6 +81,8 @@ export class ClientService {
       role: 1,
       membership: 1,
       goldSchemeId: 1,
+      referralCode: 1,
+      shopVoucher: 1,
     };
     const data = await Client.getClientsByQuery(matchQuery, selectQuery);
     return data;

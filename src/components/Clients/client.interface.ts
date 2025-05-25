@@ -16,6 +16,7 @@ interface IClientSchema extends Document {
   shopVoucher: {
     invitedRefferal: string;
   };
+  isSuperAdmin: boolean;
 }
 
 //instance methods, virtuals
