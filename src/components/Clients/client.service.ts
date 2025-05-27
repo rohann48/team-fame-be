@@ -145,6 +145,7 @@ export class ClientService {
       membership: userObj.membership,
       goldSchemeId: userObj?.["goldSchemeId"],
       shopVoucher: userObj.shopVoucher,
+      nominee: userObj.nominee || null,
     };
     // res.send(token)
   }
