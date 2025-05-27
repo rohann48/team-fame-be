@@ -19,10 +19,7 @@ export class OfferService {
   }
 
   async validateRefferalCode(code) {
-    console.log(code);
-
     const data = await this.getRefferalCodeList({});
-    console.log("data", data);
     if (code !== null) {
       //above condition for first user
       if (data[0].refferalCodes.includes(code)) {

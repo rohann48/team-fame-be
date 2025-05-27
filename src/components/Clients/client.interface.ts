@@ -17,6 +17,7 @@ interface IClientSchema extends Document {
     invitedRefferal: string;
   };
   isSuperAdmin: boolean;
+  nominee?: string;
 }
 
 //instance methods, virtuals
@@ -47,4 +48,5 @@ export interface NewClientDataParams {
   password: IClient["password"];
   confirmPassword: IClient["confirmPassword"];
   shopVoucher: IClient["shopVoucher"]["invitedRefferal"];
+  nominee?: IClient["nominee"];
 }

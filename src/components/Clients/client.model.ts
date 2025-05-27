@@ -66,6 +66,7 @@ export const ClientSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
+    nominee: String,
   },
   {
     timestamps: true,

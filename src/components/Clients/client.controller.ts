@@ -26,7 +26,8 @@ export class ClientController extends Controller {
   @Get()
   public async getClientsByQuery() {
     try {
-      const data = await new ClientService().getClientsByQuery({});
+      const matchQuery = { isSuperAdmin: { $ne: true } };
+      const data = await new ClientService().getClientsByQuery(matchQuery);
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       console.log(error);
