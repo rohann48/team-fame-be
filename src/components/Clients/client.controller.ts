@@ -157,7 +157,7 @@ export class ClientController extends Controller {
   ) {
     try {
       const userInfo = req.session["userInfo"];
-      console.log(userInfo);
+      // console.log(userInfo);
       const data = await new ClientService().getClientInfoById(clientId);
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {

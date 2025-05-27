@@ -24,7 +24,7 @@ export class GoldSchemeService {
     const matchQuery = {
       clientId: new Types.ObjectId(clientId),
     };
-    console.log(matchQuery, "mat");
+    // console.log(matchQuery, "mat");
     const data = await GoldScheme.getGoldSchemeByQuery(matchQuery);
     return data;
   }

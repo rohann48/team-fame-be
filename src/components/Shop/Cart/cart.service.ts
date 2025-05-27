@@ -12,7 +12,7 @@ export class CartService {
         cartId: data._id,
       });
     } else {
-      data = await this.updateCartById(prevCart._id, newCart.products);
+      data = await this.updateProductCartById(prevCart._id, newCart.products);
     }
     return data;
   }

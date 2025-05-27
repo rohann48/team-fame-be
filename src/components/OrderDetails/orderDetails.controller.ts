@@ -24,11 +24,16 @@ import { Types } from "mongoose";
 @Route("tf/order-details")
 export class OrderDetailsController extends Controller {
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
-  // @Security("authenticate")
+  @Security("authenticate")
   @Get("/list")
-  public async getOrderDetailList() {
+  public async getOrderDetailList(@Query() userId?) {
     try {
-      const data = await new OrderDetailsService().getOrderDetailList({});
+      const matchQuery = {
+        ...(userId !== "undefined" && { clientId: userId }),
+      };
+      const data = await new OrderDetailsService().getOrderDetailList(
+        matchQuery
+      );
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       console.log(error);
