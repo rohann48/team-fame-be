@@ -34,6 +34,15 @@ export class GoldSchemeService {
     return res;
   }
 
+  async updateInvestmentById(schemeId, razorOrderId, modifiedData) {
+    const res = await GoldScheme.updateInvestmentById(
+      schemeId,
+      razorOrderId,
+      modifiedData
+    );
+    return res;
+  }
+
   async updateSchemeInvestmentById(aboutId, data) {
     const modifiedData = {
       year: data.year,
@@ -41,6 +50,7 @@ export class GoldSchemeService {
       date: new Date(),
       amount: data.amount,
       type: "NonRefundable",
+      razorOrderId: data.razorOrderId,
     };
     const res = await GoldScheme.updateSchemeInvestmentById(
       aboutId,

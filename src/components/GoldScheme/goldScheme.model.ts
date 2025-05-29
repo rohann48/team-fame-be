@@ -15,6 +15,9 @@ const investmentSchema = {
     enum: ["FD", "NonRefundable"],
     required: true,
   },
+  paymentId: String,
+  paymentStatus: String,
+  razorOrderId: String,
 };
 
 const GoldSchemeSchema: Schema = new Schema(
@@ -110,6 +113,19 @@ GoldSchemeSchema.statics = {
     try {
       const aboutUs = await this.findByIdAndUpdate(
         schemeId,
+        { $set: data },
+        { new: true }
+      );
+      return aboutUs;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateInvestmentById: async function (schemeId, razorOrderId, data) {
+    try {
+      const aboutUs = await this.findOneAndUpdate(
+        { _id: schemeId, "investments.razorOrderId": razorOrderId },
         { $set: data },
         { new: true }
       );

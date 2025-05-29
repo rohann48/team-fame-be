@@ -7,6 +7,9 @@ interface investmentSchema {
   date: Date;
   amount: number;
   type: "FD" | "NonRefundable";
+  paymentId?: string;
+  paymentStatus?: string;
+  razorOrderId?: string;
 }
 
 interface IGoldSchemeSchema extends Document {
@@ -38,6 +41,7 @@ export interface IGoldSchemeModel extends Model<IGoldScheme> {
   updateSchemeById(docId: IGoldScheme["_id"], data);
   getGoldSchemeByQuery(matchQuery: object);
   getGoldSchemeAllList(matchQuery: object);
+  updateInvestmentById(schemeId, razorpayId, modifiedData);
 }
 
 export interface NewGoldSchemeParams {
@@ -60,6 +64,7 @@ export interface UpdateGoldInvestmentParams {
   month: number;
   date: Date;
   amount: number;
+  razorOrderId: string;
 }
 export interface IManualSchemData {
   mobileNumber: string;

@@ -71,10 +71,9 @@ OrderDetailSchema.statics = {
   },
   getOrderDetailList: async function (matchQuery = {}) {
     try {
-      const res = await this.find(matchQuery).populate(
-        "clientInfo",
-        "name contactNo"
-      );
+      const res = await this.find(matchQuery)
+        .populate("clientInfo", "name contactNo")
+        .sort({ createdAt: -1 });
       return res;
     } catch (err) {
       throw err;

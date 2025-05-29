@@ -4,6 +4,7 @@ import {
 } from "../../common/constants/status.enum";
 import { ClientService } from "../Clients/client.service";
 import { EmailService } from "../Email/Email.service";
+import { GoldSchemeService } from "../GoldScheme/goldScheme.service";
 import { OrderDetailsService } from "../OrderDetails/orderDetails.service";
 import { OfferService } from "../Shop/Offers/offer.service";
 import Razorpay from "razorpay";
@@ -53,7 +54,16 @@ export class PaymentDetailsService {
     const secret = "WUbKN0DYOagsKkIHchm3HRvM";
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
-    if (orderType !== "shop") {
+    if (orderType === "goldScheme") {
+      const modifiedData = {
+        "investments.$.paymentId": razorpay_payment_id,
+        "investments.$.paymentStatus": "success",
+      };
+      await new GoldSchemeService().updateInvestmentById(
+        data.schemeId,
+        razorpay_order_id,
+        modifiedData
+      );
       return true;
     }
     try {
@@ -91,8 +101,8 @@ export class PaymentDetailsService {
         orderInfo.paymentId = razorpay_payment_id;
         orderInfo.status = orderStatus.ORDERPLACED;
         orderInfo.statusDescription = orderDescription.ORDERPLACED;
+        await orderInfo.save();
         const mail = await new EmailService().sendEmail(emailData);
-        orderInfo.save();
         return true;
         // res.status(200).json({ status: "ok" });
       } else {
