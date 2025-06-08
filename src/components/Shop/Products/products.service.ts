@@ -55,11 +55,11 @@ export class ProductService {
     // Calculate remaining quantity
     const remainingQuantity = totalQuantity - totalOrderedQuantity;
 
-    console.log({
-      totalProductQuantity: totalQuantity,
-      totalOrderedQuantity: totalOrderedQuantity,
-      remainingQuantity: remainingQuantity,
-    });
+    // console.log({
+    //   totalProductQuantity: totalQuantity,
+    //   totalOrderedQuantity: totalOrderedQuantity,
+    //   remainingQuantity: remainingQuantity,
+    // });
 
     // Return products with inventory information
     return {

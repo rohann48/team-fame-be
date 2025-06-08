@@ -74,6 +74,8 @@ app.use(
 const sessionStore = new MongoDBStore({
   uri: process.env.SESSION_DB,
   collection: "famesessions",
+  ttl: 60 * 60 * 24, // 24 hours in seconds
+  autoRemove: "native",
 });
 sessionStore.on("error", function (error) {
   console.log(error);
@@ -100,6 +102,16 @@ mongoose.connection.on("error", (err: any) => {
   );
   process.exit();
 });
+// mongoose.connection.once("open", async () => {
+//   try {
+//     await mongoose.connection.db
+//       .collection("famesessions")
+//       .createIndex({ expires: 1 }, { expireAfterSeconds: 0 });
+//     console.log("TTL index on 'expires' field created successfully.");
+//   } catch (err) {
+//     console.error("Error creating TTL index:", err);
+//   }
+// });
 const port = process.env.PORT || 3002;
 let server;
 let httpsServer;

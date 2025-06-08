@@ -17,6 +17,7 @@ import express from "express";
 import { HttpResponseMessage } from "../../common/constants/httpResponseMessage.enum";
 import { HttpException, HttpSuccess } from "../../common/helpers/HttpResponse";
 import { ClientService } from "./client.service";
+import jwt from "jsonwebtoken";
 
 @Tags("Clients")
 @Route("tf/client")
@@ -87,7 +88,6 @@ export class ClientController extends Controller {
     @Request() req: express.Request,
     @Body() userData
   ) {
-    console.log("hi");
     try {
       const userInfo = await new ClientService().authenticateUser(
         userData,
@@ -107,17 +107,29 @@ export class ClientController extends Controller {
     try {
       let response;
       /**returning user info, if the user has a session  */
-      if (req["session"]["userInfo"]) {
+      const token = req.cookies.authToken;
+      // if (!token) throw new HttpException(400, "Unauthorized");
+
+      if (token) {
+        // console.log("session", req["session"]["userInfo"]);
+        const decoded = jwt.verify(token, process.env.JWTPRIVATEKEY);
+        // console.log("decodeddd", decoded);
+
+        const data = await new ClientService().getClientInfoById(
+          decoded["_id"]
+        );
+
         response = {
           userInfo: {
-            contactNo: req["session"]["userInfo"].contactNo,
-            emailId: req["session"]["userInfo"].emailId,
-            lastName: req["session"]["userInfo"].lastName,
-            membership: req["session"]["userInfo"].membership,
-            name: req["session"]["userInfo"].name,
-            role: req["session"]["userInfo"].role,
-            _id: req["session"]["userInfo"]._id,
-            goldSchemeId: req["session"]["userInfo"]?.goldSchemeId || null,
+            ...data.toObject(),
+            // contactNo: req["session"]["userInfo"].contactNo,
+            // emailId: req["session"]["userInfo"].emailId,
+            // lastName: req["session"]["userInfo"].lastName,
+            // membership: req["session"]["userInfo"].membership,
+            // name: req["session"]["userInfo"].name,
+            // role: req["session"]["userInfo"].role,
+            // _id: req["session"]["userInfo"]._id,
+            // goldSchemeId: req["session"]["userInfo"]?.goldSchemeId || null,
           },
         };
       } else {
@@ -133,20 +145,28 @@ export class ClientController extends Controller {
   @Get("/auth/logout")
   public async logoutUser(@Request() req: express.Request, @Query() clientId?) {
     try {
-      // req["session"].destroy()
-      let isLogoutSuccess = true;
-      req["session"].destroy((err) => {
-        if (err) {
-          isLogoutSuccess = true;
-        }
-      });
-      req.res.clearCookie("sessionID");
-      req.res.clearCookie("authToken");
-      return new HttpSuccess(HttpResponseMessage.CREATED, true);
-    } catch (error) {
-      console.log(error);
+      await new Promise((resolve, reject) => {
+        req.session.destroy((err) => {
+          if (err) {
+            console.error("Failed to destroy session:", err);
+            return reject(new HttpException(500, "Logout failed"));
+          }
 
-      throw new HttpException(400, error);
+          // Clear cookies
+          req.res?.clearCookie("sessionId");
+          req.res?.clearCookie("authToken");
+
+          resolve(true);
+        });
+      });
+
+      return new HttpSuccess(HttpResponseMessage.UPDATED, true);
+    } catch (error) {
+      console.log("Logout error:", error);
+      throw new HttpException(
+        400,
+        error instanceof Error ? error.message : String(error)
+      );
     }
   }
   //get single user

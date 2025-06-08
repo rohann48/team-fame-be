@@ -48,7 +48,7 @@ export class OrderDetailsService {
         subject: `Cash On Delivery - ${newDetails.razorOrderId}`,
         message: `Your cash on delivery of ₹${newDetails.amount} is placed successfully. Order ID: ${newDetails.razorOrderId}`,
       };
-      const mail = await new EmailService().sendEmail(emailData);
+      // const mail = await new EmailService().sendEmail(emailData);
     }
     return data;
   }

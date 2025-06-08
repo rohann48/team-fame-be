@@ -38,7 +38,7 @@ export class FileUploadSingleMutliMiddleWare {
             path: path,
             date: new Date(),
           };
-          console.log("fileInfo", fileInfo);
+          // console.log("fileInfo", fileInfo);
 
           return fileInfo;
         } catch (error) {

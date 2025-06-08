@@ -61,7 +61,7 @@ export class VideoController extends Controller {
               }
             }
             fields["videoInfo"] = uploadedFileInfo;
-            console.log("sdsfsf", fields);
+            // console.log("sdsfsf", fields);
             let response = await new VideoService().addVideo(fields);
             resolve(response);
           } catch (err) {

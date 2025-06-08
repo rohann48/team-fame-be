@@ -32,7 +32,7 @@ export function expressAuthentication(
                   reject(new Error("JWT does not contain required scope."));
                 }
               }
-              console.log("decoded", decoded);
+              // console.log("decoded", decoded);
 
               resolve(decoded);
             }

@@ -66,7 +66,7 @@ const emailNotification = (
           }
           const res = data;
           resolve(true);
-          console.log("res", res);
+          // console.log("res", res);
         } catch (error) {
           throw error;
         }

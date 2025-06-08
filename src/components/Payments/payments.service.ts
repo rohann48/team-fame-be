@@ -102,7 +102,7 @@ export class PaymentDetailsService {
         orderInfo.status = orderStatus.ORDERPLACED;
         orderInfo.statusDescription = orderDescription.ORDERPLACED;
         await orderInfo.save();
-        const mail = await new EmailService().sendEmail(emailData);
+        // const mail = await new EmailService().sendEmail(emailData);
         return true;
         // res.status(200).json({ status: "ok" });
       } else {

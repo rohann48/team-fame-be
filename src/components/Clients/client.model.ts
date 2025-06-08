@@ -90,9 +90,9 @@ ClientSchema.statics = {
         goldSchemeId: userData.goldSchemeId,
         // shopVoucher: userData.shopVoucher,
       },
-      "fame_jwtPrivateKey"
+      "fame_jwtPrivateKey",
       // process.env.JWTPRIVATEKEY
-      // {expiresIn: 60}
+      { expiresIn: "1d" }
     );
     return jwtToken;
   },
