@@ -135,6 +135,7 @@ export class ClientService {
     }
     req["session"].userInfo = userObj;
     req.res.cookie("authToken", jwtToken, cookieOptions);
+    //need to check
     return {
       _id: userObj._id,
       name: userObj.name,
