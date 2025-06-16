@@ -28,6 +28,10 @@ export interface ITestimonialModel extends Model<ITestimonial> {
   getTestimonialList(matchQuery: object): Promise<Array<ITestimonial>>;
   getTestimonialById(id: ITestimonial["_id"]): Promise<ITestimonial>;
   deleteTestimonialById(id: ITestimonial["_id"]): Promise<ITestimonial>;
+  updateTestimonialById(
+    id: ITestimonial["_id"],
+    modifiedData
+  ): Promise<ITestimonial>;
 }
 
 export interface NewTestimonialparams {

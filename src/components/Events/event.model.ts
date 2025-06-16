@@ -64,6 +64,17 @@ EventSchema.statics = {
       throw err;
     }
   },
+
+  updateEventById: async function (eventId, data) {
+    try {
+      const product = await this.findByIdAndUpdate(eventId, data, {
+        new: true,
+      });
+      return product;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
 
 const Event: IEventModel = model<IEvent, IEventModel>("Event", EventSchema);

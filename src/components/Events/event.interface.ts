@@ -32,6 +32,7 @@ export interface IEventModel extends Model<IEvent> {
   getEventList(matchQuery: object): Promise<Array<IEvent>>;
   getEventById(id: IEvent["_id"]): Promise<IEvent>;
   deleteEventById(id: IEvent["_id"]): Promise<IEvent>;
+  updateEventById(id: IEvent["_id"], modifiedData): Promise<IEvent>;
 }
 
 export interface NewEventparams {

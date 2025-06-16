@@ -20,4 +20,12 @@ export class TestimonialService {
     const data = await Testimonial.deleteTestimonialById(testId);
     return data;
   }
+
+  async updateTestimonialById(testimonialId, modifiedData) {
+    const data = await Testimonial.updateTestimonialById(
+      testimonialId,
+      modifiedData
+    );
+    return data;
+  }
 }

@@ -20,4 +20,9 @@ export class EventService {
     const data = await Event.deleteEventById(eventId);
     return data;
   }
+
+  async updateEventById(eventId, modifiedData) {
+    const data = await Event.updateEventById(eventId, modifiedData);
+    return data;
+  }
 }

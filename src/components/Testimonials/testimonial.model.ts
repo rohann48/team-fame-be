@@ -61,6 +61,17 @@ TestimonialSchema.statics = {
       throw err;
     }
   },
+
+  updateTestimonialById: async function (ProductId, data) {
+    try {
+      const product = await this.findByIdAndUpdate(ProductId, data, {
+        new: true,
+      });
+      return product;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
 
 const Testimonial: ITestimonialModel = model<ITestimonial, ITestimonialModel>(
