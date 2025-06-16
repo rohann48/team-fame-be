@@ -11,8 +11,8 @@ import Razorpay from "razorpay";
 import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils";
 
 const razorpay = new Razorpay({
-  key_id: "rzp_test_8UqYGrFyKHxYJz",
-  key_secret: "WUbKN0DYOagsKkIHchm3HRvM",
+  key_id: "rzp_live_FhnD2N4qNnWjqh", //"rzp_test_8UqYGrFyKHxYJz",
+  key_secret: "1HI7k1rfmy11HWM0O9iaAAtS", //"WUbKN0DYOagsKkIHchm3HRvM",
 });
 
 export class PaymentDetailsService {
@@ -55,6 +55,14 @@ export class PaymentDetailsService {
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
     if (orderType === "goldScheme") {
+      // const isValidSignature = validateWebhookSignature(
+      //   body,
+      //   razorpay_signature,
+      //   secret
+      // );
+      // console.log("isValidSignature", isValidSignature);
+
+      // if (isValidSignature) {
       const modifiedData = {
         "investments.$.paymentId": razorpay_payment_id,
         "investments.$.paymentStatus": "success",
@@ -65,6 +73,18 @@ export class PaymentDetailsService {
         modifiedData
       );
       return true;
+      // }
+      // else {
+      //     const modifiedData = {
+      //       "investments.$.paymentId": razorpay_payment_id,
+      //       "investments.$.paymentStatus": orderDescription.FAILED,
+      //     };
+      //     await new GoldSchemeService().updateInvestmentById(
+      //       data.schemeId,
+      //       razorpay_order_id,
+      //       modifiedData
+      //     );
+      //   }
     }
     try {
       const isValidSignature = validateWebhookSignature(
@@ -106,23 +126,11 @@ export class PaymentDetailsService {
         return true;
         // res.status(200).json({ status: "ok" });
       } else {
-        if (orderType !== "goldScheme") {
-          orderInfo.paymentStatus = "failed";
-          orderInfo.paymentId = razorpay_payment_id;
-          orderInfo.status = orderStatus.FAILED;
-          orderInfo.statusDescription = orderDescription.FAILED;
-          orderInfo.save();
-        } else {
-          const modifiedData = {
-            "investments.$.paymentId": razorpay_payment_id,
-            "investments.$.paymentStatus": orderStatus.FAILED,
-          };
-          await new GoldSchemeService().updateInvestmentById(
-            data.schemeId,
-            razorpay_order_id,
-            modifiedData
-          );
-        }
+        orderInfo.paymentStatus = "failed";
+        orderInfo.paymentId = razorpay_payment_id;
+        orderInfo.status = orderStatus.FAILED;
+        orderInfo.statusDescription = orderDescription.FAILED;
+        orderInfo.save();
         console.log("Payment verification failed");
         throw new Error("verification_failed");
       }

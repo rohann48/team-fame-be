@@ -122,14 +122,6 @@ export class ClientController extends Controller {
         response = {
           userInfo: {
             ...data.toObject(),
-            // contactNo: req["session"]["userInfo"].contactNo,
-            // emailId: req["session"]["userInfo"].emailId,
-            // lastName: req["session"]["userInfo"].lastName,
-            // membership: req["session"]["userInfo"].membership,
-            // name: req["session"]["userInfo"].name,
-            // role: req["session"]["userInfo"].role,
-            // _id: req["session"]["userInfo"]._id,
-            // goldSchemeId: req["session"]["userInfo"]?.goldSchemeId || null,
           },
         };
       } else {

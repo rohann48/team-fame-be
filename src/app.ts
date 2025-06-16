@@ -74,7 +74,7 @@ app.use(
 const sessionStore = new MongoDBStore({
   uri: process.env.SESSION_DB,
   collection: "famesessions",
-  ttl: 60 * 60 * 24, // 24 hours in seconds
+  ttl: 30 * 60, // 30 mins
   autoRemove: "native",
 });
 sessionStore.on("error", function (error) {
@@ -84,7 +84,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+    cookie: { maxAge: 1000 * 30 * 60 },
     store: sessionStore,
     resave: true,
     name: "sessionId",
@@ -104,10 +104,18 @@ mongoose.connection.on("error", (err: any) => {
 });
 // mongoose.connection.once("open", async () => {
 //   try {
-//     await mongoose.connection.db
-//       .collection("famesessions")
-//       .createIndex({ expires: 1 }, { expireAfterSeconds: 0 });
-//     console.log("TTL index on 'expires' field created successfully.");
+//     const collection = mongoose.connection.db.collection("famesessions");
+
+//     if (await collection.indexExists("expires_1")) {
+//       await collection.dropIndex("expires_1");
+//       console.log("Dropped existing TTL index.");
+//     }
+
+//     // await collection.createIndex({ expires: 1 }, { expireAfterSeconds: 1800 });
+//     console.log(
+//       "TTL index on 'expires' field created with 30 mins expiration."
+//     );
+//     console.log("TTL index on 'expires' field recreated successfully.");
 //   } catch (err) {
 //     console.error("Error creating TTL index:", err);
 //   }
