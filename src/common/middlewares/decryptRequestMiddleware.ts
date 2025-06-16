@@ -18,7 +18,7 @@ export function decryptRequestMiddleware(
     // )
     //     throw "An unauthorised user";
 
-    if (req?.headers?.apptype === "mob" || process.env.ISDEVENV !== "true") {
+    if (req?.headers?.apptype === "mob" || process.env.ISDEVENV != "true") {
       // first condition can be eliminted in production as ISDEVENV false in prod
       if (req?.body?.data?.length) {
         const decrypt = cryptoDecryptionRsa(req.body?.data);
