@@ -106,12 +106,23 @@ export class PaymentDetailsService {
         return true;
         // res.status(200).json({ status: "ok" });
       } else {
-        orderInfo.paymentStatus = "failed";
-        orderInfo.paymentId = razorpay_payment_id;
-        orderInfo.status = orderStatus.FAILED;
-        orderInfo.statusDescription = orderDescription.FAILED;
-        orderInfo.save();
-
+        if (orderType !== "goldScheme") {
+          orderInfo.paymentStatus = "failed";
+          orderInfo.paymentId = razorpay_payment_id;
+          orderInfo.status = orderStatus.FAILED;
+          orderInfo.statusDescription = orderDescription.FAILED;
+          orderInfo.save();
+        } else {
+          const modifiedData = {
+            "investments.$.paymentId": razorpay_payment_id,
+            "investments.$.paymentStatus": orderStatus.FAILED,
+          };
+          await new GoldSchemeService().updateInvestmentById(
+            data.schemeId,
+            razorpay_order_id,
+            modifiedData
+          );
+        }
         console.log("Payment verification failed");
         throw new Error("verification_failed");
       }
