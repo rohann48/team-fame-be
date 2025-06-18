@@ -46,7 +46,7 @@ export class ProductController extends Controller {
   public async createProduct(@Request() req: express.Request) {
     function uploadFileToDoc(req) {
       return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({ multiples: false });
         form.parse(req, async (err, fields, files) => {
           if (err) {
             reject(err);
@@ -134,7 +134,7 @@ export class ProductController extends Controller {
   //   }
   // }
   @SuccessResponse(200, HttpResponseMessage.UPDATED)
-  // @Security("authenticate")
+  @Security("authenticate")
   @Put("/update")
   public async updateProductById(
     @Query() productId,
@@ -142,7 +142,7 @@ export class ProductController extends Controller {
   ) {
     function uploadFileToDoc(req) {
       return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({ multiples: false });
         form.parse(req, async (err, fields, files) => {
           if (err) {
             reject(err);

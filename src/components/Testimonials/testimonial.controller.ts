@@ -43,7 +43,7 @@ export class TestimonialController extends Controller {
   public async createTestimonial(@Request() req: express.Request) {
     function uploadFileToDoc(req: express.Request) {
       return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({ multiples: false });
         form.parse(req, async (err, fields, files) => {
           if (err) {
             reject(err);
@@ -133,15 +133,16 @@ export class TestimonialController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.UPDATED)
-  // @Security("authenticate")
+  @Security("authenticate")
   @Put("/update")
   public async updateTestimonialById(
-    @Query() testimonialId,
-    @Request() req: express.Request
+    @Request() req: express.Request,
+    @Query() testimonialId
   ) {
     function uploadFileToDoc(req) {
       return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({ multiples: false });
+
         form.parse(req, async (err, fields, files) => {
           if (err) {
             reject(err);
@@ -206,7 +207,7 @@ export class TestimonialController extends Controller {
 
     try {
       const updatedData = await uploadFileToDoc(req);
-
+      this.setStatus(201);
       return new HttpSuccess(HttpResponseMessage.UPDATED, updatedData);
     } catch (err) {
       console.log(err);

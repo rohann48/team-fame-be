@@ -44,7 +44,7 @@ export class EventController extends Controller {
   public async createEvent(@Request() req: express.Request) {
     function uploadFileToDoc(req: express.Request) {
       return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({ multiples: false });
         form.parse(req, async (err, fields, files) => {
           if (err) {
             reject(err);
@@ -130,7 +130,7 @@ export class EventController extends Controller {
   }
 
   @SuccessResponse(200, HttpResponseMessage.UPDATED)
-  // @Security("authenticate")
+  @Security("authenticate")
   @Put("/update")
   public async updateTestimonialById(
     @Query() eventId,
@@ -138,7 +138,7 @@ export class EventController extends Controller {
   ) {
     function uploadFileToDoc(req) {
       return new Promise((resolve, reject) => {
-        const form = new formidable.IncomingForm();
+        const form = new formidable.IncomingForm({ multiples: false });
         form.parse(req, async (err, fields, files) => {
           if (err) {
             reject(err);
