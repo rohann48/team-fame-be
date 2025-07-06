@@ -10,7 +10,14 @@ export class EventService {
     const data = await Event.getEventList({});
     return data;
   }
-
+  async getAllEventClentList(matchQuery, selectQuery, populateQuery) {
+    const data = await Event.getAllEventClentList(
+      matchQuery,
+      selectQuery,
+      populateQuery
+    );
+    return data;
+  }
   async getEventById(eventId) {
     const data = await Event.getEventById(eventId);
     return data;

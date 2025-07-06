@@ -18,6 +18,12 @@ export const EventSchema: Schema = new Schema(
     date: Date,
     time: String,
     imageInfo: [fileDetails],
+    clientIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Client",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -42,6 +48,29 @@ EventSchema.statics = {
     try {
       const events = await this.find(matchQuery);
       return events;
+    } catch (err) {
+      throw err;
+    }
+  },
+  getAllEventClentList: async function (
+    matchQuery,
+    selectQuery,
+    populateQuery
+  ) {
+    try {
+      let query = this.find(matchQuery);
+
+      if (selectQuery && Object.keys(selectQuery).length > 0) {
+        query = query.select(selectQuery);
+      }
+
+      if (populateQuery && populateQuery.length > 0) {
+        populateQuery.forEach((populate) => {
+          query = query.populate(populate);
+        });
+      }
+
+      return query.exec();
     } catch (err) {
       throw err;
     }

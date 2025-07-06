@@ -107,16 +107,28 @@ export class EventController extends Controller {
   }
   @SuccessResponse(200, HttpResponseMessage.FETCHED)
   // @Security("authenticate")
-  @Get("{eventId}")
-  public async getEventById(@Path() eventId) {
+  @Get("/client-events")
+  public async getAllEvnetForClient() {
     try {
-      const data = await new EventService().getEventById(eventId);
+      const matchQuery = {};
+      const selectQuery = {};
+      const populateQuery = [
+        {
+          path: "clientIds",
+          select: "name lastName contactNo emailId",
+          model: "Client",
+        },
+      ];
+      const data = await new EventService().getAllEventClentList(
+        matchQuery,
+        selectQuery,
+        populateQuery
+      );
       return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       throw new HttpException(400, error);
     }
   }
-
   @SuccessResponse(200, HttpResponseMessage.DELETED)
   @Security("authenticate")
   @Get("delete/{eventId}")
@@ -124,6 +136,17 @@ export class EventController extends Controller {
     try {
       const data = await new EventService().deleteEventById(eventId);
       return new HttpSuccess(HttpResponseMessage.DELETED, data);
+    } catch (error) {
+      throw new HttpException(400, error);
+    }
+  }
+  @SuccessResponse(200, HttpResponseMessage.FETCHED)
+  // @Security("authenticate")
+  @Get("{eventId}")
+  public async getEventById(@Path() eventId) {
+    try {
+      const data = await new EventService().getEventById(eventId);
+      return new HttpSuccess(HttpResponseMessage.FETCHED, data);
     } catch (error) {
       throw new HttpException(400, error);
     }
@@ -208,6 +231,33 @@ export class EventController extends Controller {
     } catch (err) {
       console.log(err);
       throw new HttpException(400, err);
+    }
+  }
+  @SuccessResponse(200, HttpResponseMessage.UPDATED)
+  @Security("authenticate")
+  @Put("/register-event")
+  public async registerEvent(@Query() eventId, @Body() body) {
+    const { clientId } = body;
+    try {
+      const existingEvent = await new EventService().getEventById(eventId);
+      if (!existingEvent) {
+        throw new HttpException(404, "Event not found");
+      }
+      if (
+        existingEvent.clientIds &&
+        existingEvent.clientIds.includes(clientId)
+      ) {
+        throw new HttpException(
+          400,
+          "You are already registered for this event"
+        );
+      }
+      const response = await new EventService().updateEventById(eventId, {
+        $addToSet: { clientIds: clientId },
+      });
+      return new HttpSuccess(HttpResponseMessage.DELETED, response);
+    } catch (error) {
+      throw new HttpException(400, error);
     }
   }
 }

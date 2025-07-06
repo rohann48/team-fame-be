@@ -16,6 +16,7 @@ interface IEventSchema extends Document {
   date: Date;
   time: string;
   imageInfo: [fileDetails];
+  clientIds: string[];
 }
 
 //instance methods, virtuals
@@ -30,6 +31,11 @@ export interface IEventPopulated extends IEvent {}
 export interface IEventModel extends Model<IEvent> {
   addEvent(data: NewEventparams): Promise<IEvent>;
   getEventList(matchQuery: object): Promise<Array<IEvent>>;
+  getAllEventClentList(
+    matchQuery: object,
+    selectQuery: object,
+    populateQuery: object
+  ): Promise<Array<IEvent>>;
   getEventById(id: IEvent["_id"]): Promise<IEvent>;
   deleteEventById(id: IEvent["_id"]): Promise<IEvent>;
   updateEventById(id: IEvent["_id"], modifiedData): Promise<IEvent>;
