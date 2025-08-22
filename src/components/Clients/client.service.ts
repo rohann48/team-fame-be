@@ -65,7 +65,7 @@ export class ClientService {
   async getOneClientInfo(matchQuery, selectQuery) {
     try {
       const data = await Client.getOneClientInfo(matchQuery, selectQuery);
-      return data.toObject();
+      return data?.toObject();
       // clientInfo: data.clientInfo.toObject(),
     } catch (error) {
       console.log("err", error);
@@ -114,10 +114,10 @@ export class ClientService {
 
     const selectQuery = { confirmPassword: 0, referralCode: 0 };
     const userInfo = await this.getOneClientInfo(matchQuery, selectQuery);
-    let userObj = { ...userInfo };
-    if (!userObj) {
+    if (!userInfo) {
       throw new Error("Invalid contactNo or password");
     }
+    let userObj = { ...userInfo };
     const match = await bcrypt.compare(userData.password, userObj.password);
     if (!match) {
       throw new Error("Invalid contactNo or password");
